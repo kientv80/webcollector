@@ -1,0 +1,96 @@
+#!/bin/sh
+################################################################################
+# Required: run this script from the project home directory
+#
+# Guide: to be able use this script, project should be built by ant or maven
+#  , so that it will pack a manifest info for execution into distrib jar file
+#  To build a netbeans project with ant, go to project home directory (location of build.xml)
+#  , then run "ant jar" command (may run "ant clean" for clean the previous build before)
+#
+################################################################################
+#
+#setup JAVA environment
+#. /zserver/java/set_env
+
+#setup Application environment
+PROJECT_HOME=`pwd`
+CONF_DIR=conf
+JAR_DIR=lib
+APP_NAME=webcollector
+
+################################################################################
+#do work
+#
+TMP_DIR="/tmp/$APP_NAME"
+
+#pid file
+PID_FILE="$APP_NAME.pid"
+if [ "x$PID_FILE" != "x" ]; then
+PID_PATH="$TMP_DIR/$PID_FILE"
+fi
+
+#run-log file
+RUNLOG_FILE="$APP_NAME.log"
+if [ "x$RUNLOG_FILE" != "x" ]; then
+RUNLOG_PATH="$TMP_DIR/$RUNLOG_FILE"
+fi
+
+launchService() {
+	echo "Starting webcollector ...."
+	ant run
+	echo "Starting webcollector successfully!"
+	########## inline setup ##########
+	#echo " * setup run-arguments in: $PROJECT_HOME/service-env"
+	#./service-env
+	#echo " * app configuration will be loaded in: $PROJECT_HOME/$CONF_DIR/$APP_PROF.$CONF_FILES"
+	#echo
+	########## prepare ##########
+	#RUN_CMD="java $JVM_ARGS -jar $JAR_DIR/$JAR_NAME.jar $APP_ARGS"
+	#echo Execute: $RUN_CMD
+	#echo "Execution log: $RUNLOG_PATH"
+	#execution log file
+	#mkdir -p $TMP_DIR
+	#echo Execute command: $RUN_CMD >"$RUNLOG_PATH"
+	########## execute ##########
+	#$RUN_CMD 1>>"$RUNLOG_PATH" 2>>"$RUNLOG_PATH" &
+	#/bin/echo -n $! > "$PID_PATH"
+}
+
+case "$1" in
+	start)
+		launchService
+		;;
+		#if [ -e "$PID_PATH" ]; then
+		#echo "Application is running!"
+		#echo
+		#exit 1
+		#fi
+		##ok:start it
+		#launchService
+		#echo "Started."
+		#;;
+	stop)
+		if [ ! -e "$PID_PATH" ]; then
+		echo "Application already stopped!"
+		echo
+		exit 1
+		fi
+		##ok:stop it
+		kill -9 `cat $PID_PATH`
+		rm $PID_PATH -f
+		echo "Stopped."
+		;;
+	restart)
+		$0 stop
+		echo "Waiting..."
+		sleep 5
+		$0 start
+		;;
+	status)
+		;;
+	*)
+		echo "Usage: `basename $0` start|stop|restart"
+		echo
+		exit 1
+esac
+
