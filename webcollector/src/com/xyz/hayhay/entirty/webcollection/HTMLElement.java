@@ -107,6 +107,13 @@ public class HTMLElement {
 	public void setExcludedTexts(String excludedTexts) {
 		this.excludedTexts = excludedTexts;
 	}
+	public int getMinLength() {
+		return minLength;
+	}
+	public void setMinLength(int minLength) {
+		this.minLength = minLength;
+	}
 	private String selector;
 	private String excludedTexts;
+	private int minLength;
 }

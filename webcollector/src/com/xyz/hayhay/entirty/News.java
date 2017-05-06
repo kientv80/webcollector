@@ -167,17 +167,7 @@ public class News {
 	public void setHotNews(boolean isHotNews) {
 		this.isHotNews = isHotNews;
 	}
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (obj instanceof News) {
-//			News tm = (News) obj;
-//			if(tm != null && tm.getUrl() != null && tm.getUrl().equals(this.getUrl()))
-//				return true;
-//			if(tm != null && tm.getTitle() != null && tm.getUniqueName().equals(this.getUniqueName()))
-//					return true;
-//		}
-//		return false;
-//	}
+
 	
 	public String getCateName() {
 		if(MappingHelper.categoryTypeLabelMapping.get(getType()) != null)
@@ -230,14 +220,16 @@ public class News {
 			return false;
 		}
 		News other = (News) obj;
-		if (title == null) {
-			if (other.title != null) {
-				return false;
+		if(this.getFromWebSite().equals(other.getFromWebSite())){
+			if(this.getUrl().equals(other.getUrl())) {
+				return true;
 			}
-		} else if ( !isSiminler(url, other.url, 0.7)) {
-			return false;
+		}else{
+			if(isSiminler(this.getTitle(), other.getTitle(), 0.6)){
+				return true;
+			}
 		}
-		return true;
+		return false;
 	}
 	public static boolean isSiminler(String str1, String str2, double percent){
 		String[] str1List = str1.toLowerCase().split(" ");

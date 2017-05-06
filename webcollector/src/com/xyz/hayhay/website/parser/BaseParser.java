@@ -17,13 +17,19 @@ import net.htmlparser.jericho.Source;
 
 public abstract class BaseParser {
 	protected static final int MAX_NEWS_ON_CATE = 10;
+
 	public abstract List<News> collectArticle(Source source, String url, String fromWebsite);
+
 	public void parseElementToNews(Element e, News news, A a, Title title, Image image, ShotDescription p) {
 		String value = "";
 		if (news.getUrl() == null || news.getUrl().isEmpty()) {
 			value = getValue(e, a);
 			if (value != null && !value.isEmpty()) {
-				news.setUrl(a.getDomain() + value);
+				if (!value.startsWith("http")) {
+					news.setUrl(a.getDomain() + value);
+				} else {
+					news.setUrl(value);
+				}
 			}
 		}
 		if (!title.isIncludeAll()) {
@@ -48,7 +54,11 @@ public abstract class BaseParser {
 		if (news.getImageUrl() == null || news.getImageUrl().isEmpty()) {
 			value = getValue(e, image);
 			if (value != null && !value.isEmpty() && value.indexOf("blank") < 0 && value.indexOf("pixel") < 0) {
-				news.setImageUrl(image.getDomain() + value);
+				if (!value.startsWith("http")) {
+					news.setImageUrl(image.getDomain() + value);
+				} else {
+					news.setImageUrl(value);
+				}
 			}
 		}
 		if (p != null && !p.isIncludeAll()) {
@@ -71,6 +81,7 @@ public abstract class BaseParser {
 			}
 		}
 	}
+
 	public String getValue(Element e, HTMLElement html) {
 		if (isMach(e, html)) {
 			String value = "";
@@ -85,17 +96,26 @@ public abstract class BaseParser {
 						return null;
 				}
 			}
+			if (html.getMinLength() != 0 && value.length() < html.getMinLength())
+				return null;
+
 			return value;
 		}
 		return null;
 	}
+
 	protected boolean isMach(Element e, HTMLElement htmlElement) {
 		if (htmlElement == null)
 			return false;
 
 		if (e.getName().equals(htmlElement.getElementName())) {
 			if (htmlElement.getElementAttribute() != null && !htmlElement.getElementAttribute().isEmpty()) {
-				if ((htmlElement.getElementValue() == null && htmlElement.getElementValue() == null) || (htmlElement.getElementValue() != null && htmlElement.getElementValue().equals(e.getAttributeValue(htmlElement.getElementAttribute()))) || (e.getAttributeValue(htmlElement.getElementAttribute())) != null && e.getAttributeValue(htmlElement.getElementAttribute()).equals(htmlElement.getElementValue())) {
+				if ((htmlElement.getElementValue() == null && htmlElement.getElementValue() == null)
+						|| (htmlElement.getElementValue() != null && htmlElement.getElementValue()
+								.equals(e.getAttributeValue(htmlElement.getElementAttribute())))
+						|| (e.getAttributeValue(htmlElement.getElementAttribute())) != null
+								&& e.getAttributeValue(htmlElement.getElementAttribute())
+										.equals(htmlElement.getElementValue())) {
 					return true;
 				} else {
 					return false;
@@ -108,6 +128,7 @@ public abstract class BaseParser {
 		}
 		return false;
 	}
+
 	public static Source getSource(String url) throws Exception {
 		Parser pa = new Parser(url);
 		NodeIterator no = pa.elements();

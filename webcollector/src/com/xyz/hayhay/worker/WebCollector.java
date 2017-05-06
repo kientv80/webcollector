@@ -33,6 +33,9 @@ import com.xyz.hayhay.website.collector.XoSoKienThietCollector;
 import com.xyz.hayhay.website.collector.tv.HaNoiTVCollector;
 import com.xyz.hayhay.website.collector.tv.VTVCabCollector;
 import com.xyz.hayhay.website.collector.tv.VTVProgramCollector;
+import com.xyz.hayhay.website.collector.worldwebsite.BusinessNewsCollector;
+import com.xyz.hayhay.website.collector.worldwebsite.ScienceNewsCollector;
+import com.xyz.hayhay.website.collector.worldwebsite.TechNewsCollector;
 
 public class WebCollector {
 	private static final int FIFTEEN_MINUTES= 15*60*1000;
@@ -49,13 +52,7 @@ public class WebCollector {
 		if(!run)
 			return;
 		
-		//		Collect TV Schedule
-		VTVProgramCollector vtv = new VTVProgramCollector();
-		VTVCabCollector vtvCab = new VTVCabCollector();
-		HaNoiTVCollector bv = new HaNoiTVCollector();
-		scheduler.scheduleAtFixedRate(vtv, 3600, FOUR_HOURS, TimeUnit.SECONDS);
-		scheduler.scheduleAtFixedRate(vtvCab, 2*60, FOUR_HOURS, TimeUnit.SECONDS);
-		scheduler.scheduleAtFixedRate(bv, 6*60, FOUR_HOURS, TimeUnit.SECONDS);
+
 		//Collect News
 		CollectorManager cMng = CollectorManager.getInstance();
 		cMng.register(new BatDongSanCollector(ONE_HOUR));
@@ -81,8 +78,21 @@ public class WebCollector {
 		cMng.register(new KinhDoanhCollector(ONE_HOUR));
 		
 		cMng.register(new XoSoKienThietCollector(ONE_HOUR));
-		cMng.startCollectorManager();
 		
+		cMng.register(new BusinessNewsCollector(ONE_HOUR));
+		cMng.register(new TechNewsCollector(ONE_HOUR));
+		cMng.register(new ScienceNewsCollector(ONE_HOUR));
+		
+		//		Collect TV Schedule
+		VTVProgramCollector vtv = new VTVProgramCollector();
+		VTVCabCollector vtvCab = new VTVCabCollector();
+		HaNoiTVCollector bv = new HaNoiTVCollector();
+		scheduler.scheduleAtFixedRate(vtv, 3600, FOUR_HOURS, TimeUnit.SECONDS);
+		scheduler.scheduleAtFixedRate(vtvCab, 2*60, FOUR_HOURS, TimeUnit.SECONDS);
+		scheduler.scheduleAtFixedRate(bv, 6*60, FOUR_HOURS, TimeUnit.SECONDS);
+		
+
+		cMng.startCollectorManager();
 		PingServer.startPingServer();
 
 	}
