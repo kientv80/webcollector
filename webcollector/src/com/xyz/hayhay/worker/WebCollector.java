@@ -34,6 +34,8 @@ import com.xyz.hayhay.website.collector.tv.HaNoiTVCollector;
 import com.xyz.hayhay.website.collector.tv.VTVCabCollector;
 import com.xyz.hayhay.website.collector.tv.VTVProgramCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.BusinessNewsCollector;
+import com.xyz.hayhay.website.collector.worldwebsite.HealthCollector;
+import com.xyz.hayhay.website.collector.worldwebsite.PoliticsCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.ScienceNewsCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.TechNewsCollector;
 
@@ -82,6 +84,8 @@ public class WebCollector {
 		cMng.register(new BusinessNewsCollector(ONE_HOUR));
 		cMng.register(new TechNewsCollector(ONE_HOUR));
 		cMng.register(new ScienceNewsCollector(ONE_HOUR));
+		cMng.register(new HealthCollector(ONE_HOUR));
+		cMng.register(new PoliticsCollector(ONE_HOUR));
 		
 		//		Collect TV Schedule
 		VTVProgramCollector vtv = new VTVProgramCollector();

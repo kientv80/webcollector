@@ -19,14 +19,16 @@ public class NYTimesParser extends BaseParser {
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		List<News> news = new ArrayList<>();
 		List<Element> articles = source.getElementById("main").getAllElementsByClass("story");
-		if(url.endsWith("")){
+		A a = new A();
+		Title title = new Title("a", null, null, true);
+		Image i = new Image();
+		ShotDescription p = new ShotDescription("p", "class", "summary", true);
+		if(url.endsWith("technology?src=busfn")){
 			articles = source.getElementById("main").getAllElements("article");
+			title = new Title("h2", "class", "headline", true);
 		}
 		if (articles != null && !articles.isEmpty()) {
-			A a = new A();
-			Title title = new Title("a", null, null, true);
-			Image i = new Image();
-			ShotDescription p = new ShotDescription("p", "class", "summary", true);
+
 			for (Element article : articles) {
 				News n = new News();
 				n.setFromWebSite(fromWebsite);
@@ -36,6 +38,15 @@ public class NYTimesParser extends BaseParser {
 				} else if (url.endsWith("science")) {
 					n.setType(NewsTypes.WN_SIENCE);
 					n.setParentCateName(NewsTypes.WN_SIENCE);
+				}else if (url.endsWith("health")) {
+					n.setType(NewsTypes.WN_HEALTH);
+					n.setParentCateName(NewsTypes.WN_HEALTH);
+				}else if (url.endsWith("politics/index.html")) {
+					n.setType(NewsTypes.WN_POLITICS);
+					n.setParentCateName(NewsTypes.WN_POLITICS);
+				}else if (url.contains("technology")) {
+					n.setType(NewsTypes.WN_TECH);
+					n.setParentCateName(NewsTypes.WN_TECH);
 				}
 				parseElementToNews(article, n, a, title, i, p);
 				if (!news.contains(n) && n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null

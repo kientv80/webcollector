@@ -19,6 +19,9 @@ public class NewsTypes {
 	public static final String WN_TECH = "WN_TECH";
 	public static final String WN_SIENCE = "WN_SIENCE";
 	public static final String WN_BIZ = "WN_BIZ";
+	public static final String WN_HEALTH = "WN_HEALTH";
+	public static final String WN_POLITICS = "WN_POLITICS";
+	
 	public static final String HUONGTHIEN = "HUONGTHIEN";
 	public static final String SOFTSKILLS = "SOFTSKILLS";
 	
@@ -188,4 +191,5 @@ public class NewsTypes {
 	public static final String NAUAN_MONPHAP = "monphap";
 	public static final String NAUAN_CACNUOC = "nauancacnuoc";
 	public static final String MEVABE = "mevabe";
+	
 }

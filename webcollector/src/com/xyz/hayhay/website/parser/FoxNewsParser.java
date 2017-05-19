@@ -20,7 +20,7 @@ public class FoxNewsParser extends BaseParser {
 		List<News> news = new ArrayList<>();
 		List<Element> newsFeed = source.getAllElementsByClass("news-feed");
 		List<Element> articles = null;
-		if ((url.endsWith("tech.html") || url.endsWith("science.html")) && source.getElementById("content") != null) {
+		if ((url.endsWith("tech.html") || url.endsWith("science.html") || url.endsWith("health.html") || url.endsWith("politics.html")) && source.getElementById("content") != null) {
 			articles = source.getElementById("content").getAllElements("article");
 		} else if (newsFeed != null && !newsFeed.isEmpty()) {
 			articles = newsFeed.get(0).getAllElements("article");
@@ -54,6 +54,16 @@ public class FoxNewsParser extends BaseParser {
 					title.setMinLength(50);
 					n.setType(NewsTypes.WN_SIENCE);
 					n.setParentCateName(NewsTypes.WN_SIENCE);
+				} else if (url.endsWith("health.html")) {
+					title = new Title("a", null, null, true);
+					title.setMinLength(50);
+					n.setType(NewsTypes.WN_HEALTH);
+					n.setParentCateName(NewsTypes.WN_HEALTH);
+				} else if (url.endsWith("politics.html")) {
+					title = new Title("a", null, null, true);
+					title.setMinLength(50);
+					n.setType(NewsTypes.WN_POLITICS);
+					n.setParentCateName(NewsTypes.WN_POLITICS);
 				}
 				parseElementToNews(article, n, a, title, i, p);
 				if (!news.contains(n) && n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
@@ -65,5 +75,11 @@ public class FoxNewsParser extends BaseParser {
 		}
 		return news;
 	}
+	public enum ServerStatus {
+        New, Running,Up,Down,Overloaded
+    }
+	public static void main(String[] aa) {
+		System.out.println(ServerStatus.Running.ordinal());
 
+	}
 }
