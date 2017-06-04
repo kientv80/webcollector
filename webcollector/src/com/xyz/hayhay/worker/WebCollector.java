@@ -68,7 +68,7 @@ public class WebCollector {
 		cMng.register(new MusicCollector(ONE_HOUR));
 		cMng.register(new NauAnCollector(EIGHT_HOURS));
 		cMng.register(new NgoiSaoCollector(FIFTEEN_MINUTES));
-		cMng.register(new PcworldCollector(ONE_HOUR));
+		//cMng.register(new PcworldCollector(ONE_HOUR));
 		cMng.register(new SportNewsCollector(FIFTEEN_MINUTES));
 		cMng.register(new SucKhoeDoiSongNewsCollector(ONE_HOUR));
 		cMng.register(new SucKhoeNewsCollector(ONE_HOUR));

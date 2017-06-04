@@ -200,10 +200,11 @@ public class News {
 	 */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		return result;
+//		final int prime = 31;
+//		int result = 1;
+//		result = prime * result + ((title == null) ? 0 : title.hashCode());
+//		return result;
+		return 1;
 	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -220,18 +221,26 @@ public class News {
 			return false;
 		}
 		News other = (News) obj;
+		double accurate = 0.8;
+		if(other.getType()==NewsTypes.TYPE_MUSIC)
+			accurate = 1;
 		if(this.getFromWebSite().equals(other.getFromWebSite())){
 			if(this.getUrl().equals(other.getUrl())) {
 				return true;
+			}else{
+				return isSiminler(this.getTitle(), other.getTitle(), accurate);
 			}
 		}else{
-			if(isSiminler(this.getTitle(), other.getTitle(), 0.6)){
-				return true;
-			}
+			return isSiminler(this.getTitle(), other.getTitle(), accurate);
 		}
-		return false;
 	}
+
 	public static boolean isSiminler(String str1, String str2, double percent){
+		if(str1 == null && str2 == null)
+			return true;
+		else if(str1 == null && str2!=null || str1 != null && str2==null)
+			return false;
+		
 		String[] str1List = str1.toLowerCase().split(" ");
 		str2 = str2.toLowerCase();
 		double similarWorldCount = 0;

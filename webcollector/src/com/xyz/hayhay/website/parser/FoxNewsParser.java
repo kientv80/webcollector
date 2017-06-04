@@ -66,8 +66,8 @@ public class FoxNewsParser extends BaseParser {
 					n.setParentCateName(NewsTypes.WN_POLITICS);
 				}
 				parseElementToNews(article, n, a, title, i, p);
-				if (!news.contains(n) && n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
-						&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()) {
+				if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
+						&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty() && !news.contains(n)) {
 					news.add(n);
 				}
 			}

@@ -23,7 +23,7 @@ public class NYTimesParser extends BaseParser {
 		Title title = new Title("a", null, null, true);
 		Image i = new Image();
 		ShotDescription p = new ShotDescription("p", "class", "summary", true);
-		if(url.endsWith("technology?src=busfn")){
+		if(url.endsWith("?src=busfn")){
 			articles = source.getElementById("main").getAllElements("article");
 			title = new Title("h2", "class", "headline", true);
 		}
@@ -49,8 +49,8 @@ public class NYTimesParser extends BaseParser {
 					n.setParentCateName(NewsTypes.WN_TECH);
 				}
 				parseElementToNews(article, n, a, title, i, p);
-				if (!news.contains(n) && n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
-						&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()) {
+				if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
+						&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty() && !news.contains(n)) {
 					news.add(n);
 				}
 			}

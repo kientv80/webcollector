@@ -113,98 +113,6 @@ public abstract class BasedCollector extends WebsiteCollector {
 		}
 	}
 
-	protected void storeNewsBK(Website website) {
-
-		if (website.getNews().size() > 0) {
-			removeDuplicatedNews(website);
-
-			Connection con = JDBCConnection.getInstance().getConnection();
-			PreparedStatement stm = null;
-			CollectorLog clog = new CollectorLog(-1, getCollectorName(), 0, 0, "", null, "sucess", "");
-			clog.setFoundNews(website.getNews().size());
-			System.out.println(">>>>>>>>>>>>>>>>>>> news website = " + website.getName() + " found count"
-					+ website.getNews().size());
-			if (website.getNews().size() > 100) {
-				website.setNews(website.getNews().subList(0, 100));
-			}
-			try {
-				Statement stm2 = con.createStatement();
-				if (!website.isOverwrite()) {
-					ResultSet rs = stm2
-							.executeQuery("select title_id  from news where fromwebsite='" + website.getName()
-									+ "' and parent_catename='" + website.getNews().get(0).getParentCateName() + "'");
-					StringBuilder keepIds = new StringBuilder();
-					while (rs.next()) {
-						if (rs.getString("title_id") != null && !rs.getString("title_id").isEmpty()) {
-							keepIds.append(rs.getString("title_id")).append(",");
-						}
-					}
-					rs.close();
-					if (keepIds.length() > 0) {
-						List<News> removeList = new ArrayList<News>();
-						for (News n : website.getNews()) {
-							if (keepIds.indexOf(n.getUniqueName()) >= 0) {
-								removeList.add(n);
-							}
-						}
-						website.getNews().removeAll(removeList);
-						clog.setNewNews(website.getNews().size());
-					} else {
-						stm2.execute("delete from news where fromwebsite='" + website.getName() + "' and type='"
-								+ website.getNews().get(0).getType() + "'");
-					}
-				} else {
-					stm2.execute("delete from news where fromwebsite='" + website.getName() + "' and type='"
-							+ website.getNews().get(0).getType() + "'");
-				}
-				stm2.close();
-				Collections.reverse(website.getNews());
-				log.info(">>>>>>>>>>>>>>>>>>> news website = " + website.getName() + " count"
-						+ website.getNews().size());
-				System.out.println(">>>>>>>>>>>>>>>>>>> news website = " + website.getName() + " store count"
-						+ website.getNews().size());
-				if (website.getNews().size() > 0) {
-					stm = con.prepareStatement(
-							"insert into news(title,shotdesc,url,fromwebsite,imageurl,type,ishotnews,newsorder,collectedtime,title_id,parent_catename)values(?,?,?,?,?,?,?,?,?,?,?)");
-					for (News n : website.getNews()) {
-						stm.clearParameters();
-						stm.setString(1, n.getTitle());
-						stm.setString(2, n.getShotDesc());
-						stm.setString(3, n.getUrl());
-						stm.setString(4, n.getFromWebSite());
-						stm.setString(5, n.getImageUrl());
-						stm.setString(6, n.getType());
-						stm.setBoolean(7, n.isHotNews());
-						stm.setString(8, n.getNewsOrder());
-						stm.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
-						stm.setString(10, n.getUniqueName());
-						stm.setString(11, n.getParentCateName());
-						stm.addBatch();
-					}
-					stm.executeBatch();
-					removeOldNewsAndKeepOnly50LatestNews(website.getNews().get(0).getType(), website.getName(), con);
-				}
-			} catch (Exception e) {
-				log.error("", e);
-				e.printStackTrace();
-			} finally {
-				try {
-					if (stm != null)
-						stm.close();
-
-					con.close();
-				} catch (SQLException e) {
-					log.error("", e);
-				}
-			}
-
-		} else {
-			CollectorLog clog = new CollectorLog(-1, getCollectorName(), 0, 0, "", null, "warning",
-					"can't collect news");
-			log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + website.getName() + " collect " + "0 news ");
-		}
-	}
-
 	protected void storeNews(Website website) {
 
 		if (website.getNews().size() > 0) {
@@ -222,22 +130,21 @@ public abstract class BasedCollector extends WebsiteCollector {
 			try {
 				Statement stm2 = con.createStatement();
 				if (!website.isOverwrite()) {
-					ResultSet rs = stm2.executeQuery("select *  from news where fromwebsite='" + website.getName()
-							+ "' and parent_catename='" + website.getNews().get(0).getParentCateName() + "'");
-					Map<String, News> oldNews = new HashMap<>();
+					ResultSet rs = stm2.executeQuery("select *  from news where fromwebsite='" + website.getName() + "' order by id desc  limit 100");
+					Map<News, News> oldNews = new HashMap<>();
 					while (rs.next()) {
 						News on = new News();
 						on.setId(rs.getInt("id"));
 						on.setUrl(rs.getString("url"));
 						on.setTitle(rs.getString("title"));
-						oldNews.put(on.getUrl(), on);
+						oldNews.put(on, on);
 					}
 					rs.close();
 					if (oldNews.size() > 0) {
 						List<News> updateList = new ArrayList<News>();
 						for (News n : website.getNews()) {
-							News ons = oldNews.get(n.getUrl());
-							if (!n.equals(ons)) {
+							News ons = oldNews.get(n);
+							if (ons != null && !ons.getTitle().equals(n.getTitle())) {
 								ons.setTitle(n.getTitle());
 								ons.setShotDesc(n.getShotDesc());
 								ons.setDate(new Timestamp(System.currentTimeMillis()));
@@ -489,7 +396,6 @@ public abstract class BasedCollector extends WebsiteCollector {
 		Source s = new Source(content);
 		return s;
 	}
-
 }
 
 interface ParseVisitor {
