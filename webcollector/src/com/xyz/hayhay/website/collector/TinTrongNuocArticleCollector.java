@@ -16,7 +16,7 @@ public class TinTrongNuocArticleCollector extends ArticleCollector {
 			"http://tuoitre.vn/tin/chinh-tri-xa-hoi/moi-truong",
 			"http://tuoitre.vn/tin/chinh-tri-xa-hoi/chuyen-thuong-ngay",
 			"http://tuoitre.vn/tin/chinh-tri-xa-hoi/tieu-diem", "http://tuoitre.vn/tin/phap-luat",
-			"http://tuoitre.vn/tin/nhip-song-tre", "http://vnexpress.net/tin-tuc/thoi-su" };
+			"http://tuoitre.vn/tin/nhip-song-tre", "http://vnexpress.net/tin-tuc/thoi-su"};
 
 	public TinTrongNuocArticleCollector(long repeatTime) {
 		super(repeatTime);

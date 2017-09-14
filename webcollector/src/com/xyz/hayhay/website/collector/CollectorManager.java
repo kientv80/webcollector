@@ -201,15 +201,16 @@ public class CollectorManager {
 			System.out.println(">>>>>>>>>>>>>>>>>>> news website = " + website.getName() + " found count"
 					+ website.getNews().size());
 
-			if (website.getNews().size() > 100) {
-				website.setNews(website.getNews().subList(0, 100));
+			if (website.getNews().size() > 30) {
+				website.setNews(website.getNews().subList(0, 30));
 			}
+			/*
 			try {
 				List<News> newNews = new ArrayList<News>();
-				Statement stm2 = con.createStatement();
+				PreparedStatement stm2 = con.prepareStatement("select id,url,title,fromwebsite  from news where fromwebsite=?");
 				if (!website.isOverwrite()) {
-					ResultSet rs = stm2.executeQuery("select id,url,title,fromwebsite  from news where fromwebsite='" + website.getName()
-							+ "' order by id desc  limit 200");
+					stm2.setString(1, website.getName());
+					ResultSet rs = stm2.executeQuery();
 					Map<News, News> oldNews = new HashMap<>();
 					while (rs.next()) {
 						News on = new News();
@@ -300,7 +301,7 @@ public class CollectorManager {
 					log.error("", e);
 				}
 			}
-
+*/
 		} else {
 			log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + website.getName() + " collect " + "0 news ");
 		}

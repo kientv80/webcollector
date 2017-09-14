@@ -18,6 +18,7 @@ public class TuoiTreParser extends BaseParser {
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		A a = new A("a", null, null, false);
+		a.setDomain("http://tuoitre.vn");
 		a.setValueFromAtttributeName("href");
 		Title t = new Title("img", null, null, false);
 		t.setValueFromAtttributeName("alt");
@@ -54,22 +55,26 @@ public class TuoiTreParser extends BaseParser {
 	private List<News> collectArticles(Source source, A a, Title t, Image image, ShotDescription p, String type,String parentCate,
 			String fromWebsite) {
 		List<News> tuoitreNews = new ArrayList<>();
-		News n = new News();
-		n.setFromWebSite(fromWebsite);
-		n.setHotNews(true);
-		n.setType(type);
-		n.setParentCateName(parentCate);
-		parseElementToNews(source.getAllElementsByClass("block-feature").get(0), n, a, t, image, p);
-		if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
-				&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {
-			if (!tuoitreNews.contains(n)) {
-				tuoitreNews.add(n);
+		
+		List<Element> hostNews = source.getAllElementsByClass("focus_bottom clear").get(0).getAllElements("li");
+		for(Element hn : hostNews){
+			News n = new News();
+			n.setFromWebSite(fromWebsite);
+			n.setHotNews(true);
+			n.setType(type);
+			n.setParentCateName(parentCate);
+			parseElementToNews(hn, n, a, t, image, p);
+			if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
+					&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {
+				if (!tuoitreNews.contains(n)) {
+					tuoitreNews.add(n);
+				}
 			}
 		}
-		t.setElementAttribute(null);
-		t.setElementValue(null);
-		if (source.getAllElementsByClass("list-news") != null && source.getAllElementsByClass("list-news").size() > 0) {
-			for (Element midNews : source.getAllElementsByClass("list-news").get(0).getChildElements()) {
+		
+		t = new Title("a", "class", "ff-bold", true);
+		if (source.getAllElementsByClass("list-news-content") != null && source.getAllElementsByClass("list-news-content").size() > 0) {
+			for (Element midNews : source.getAllElementsByClass("list-news-content").get(0).getChildElements()) {
 				News mn = new News();
 				mn.setFromWebSite(fromWebsite);
 				mn.setType(type);
@@ -85,7 +90,7 @@ public class TuoiTreParser extends BaseParser {
 			}
 		}
 
-		for (Element midNews : source.getElementById("newhot_most_content").getChildElements()) {
+		/*for (Element midNews : source.getElementById("newhot_most_content").getChildElements()) {
 			News mn = new News();
 			mn.setFromWebSite(fromWebsite);
 			mn.setType(type);
@@ -112,7 +117,7 @@ public class TuoiTreParser extends BaseParser {
 					tuoitreNews.add(mn);
 				}
 			}
-		}
+		}*/
 		return tuoitreNews;
 	}
 }

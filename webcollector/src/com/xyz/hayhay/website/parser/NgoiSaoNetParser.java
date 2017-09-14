@@ -17,13 +17,13 @@ public class NgoiSaoNetParser extends BaseParser{
 
 	@Override
 	public List<News> collectArticle(Source s, String url, String fromWeb) {
-		A a = new A("a", "class", "title_tin", false);
+		A a = new A("a", null, null, false);
 		a.setValueFromAtttributeName("href");
-		Title t = new Title("a", "class", "img_tin", false);
+		Title t = new Title("a", null, null, false);
 		t.setValueFromAtttributeName("title");
 		Image image = new Image("img", null, null, false);
 		image.setValueFromAtttributeName("src");
-		ShotDescription p = new ShotDescription("div", "class", "lead_tin", true);
+		ShotDescription p = new ShotDescription("p", null, null, true);
 		List<News> ngoisaoNet = new ArrayList<>();
 		String type = "";
 		if (url.indexOf("showbiz-viet") > 0) {
@@ -38,7 +38,10 @@ public class NgoiSaoNetParser extends BaseParser{
 			type = NewsTypes.BENLE;
 		}
 		Element homeNews = s.getElementById("news_home");
-		for (Element e : homeNews.getChildElements()) {
+		List<Element> news = s.getElementById("box_tintop_new").getAllElements("li");
+		news.addAll(homeNews.getChildElements());
+		
+		for (Element e : news) {
 			News n = new News();
 			n.setFromWebSite(fromWeb);
 			n.setHotNews(true);
@@ -52,24 +55,7 @@ public class NgoiSaoNetParser extends BaseParser{
 				}
 			}
 		}
-		if (s.getAllElementsByClass("list_tin width_common") != null
-				&& s.getAllElementsByClass("list_tin width_common").size() > 0) {
-			Element tieudiem = s.getAllElementsByClass("list_tin width_common").get(0);
-			for (Element e : tieudiem.getChildElements()) {
-				News n = new News();
-				n.setFromWebSite(fromWeb);
-				n.setHotNews(true);
-				n.setType(type);
-				n.setParentCateName(NewsTypes.NGOISAO);
-				parseElementToNews(e, n, a, t, image, p);
-				if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
-						&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {
-					if (!ngoisaoNet.contains(n)) {
-						ngoisaoNet.add(n);
-					}
-				}
-			}
-		}
+		
 		return ngoisaoNet;
 	}
 
