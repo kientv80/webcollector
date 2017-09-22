@@ -204,7 +204,7 @@ public class CollectorManager {
 			if (website.getNews().size() > 30) {
 				website.setNews(website.getNews().subList(0, 30));
 			}
-			/*
+			
 			try {
 				List<News> newNews = new ArrayList<News>();
 				PreparedStatement stm2 = con.prepareStatement("select id,url,title,fromwebsite  from news where fromwebsite=?");
@@ -285,7 +285,7 @@ public class CollectorManager {
 							stm.addBatch();
 						}
 						stm.executeBatch();
-						removeOldNewsAndKeepOnly50LatestNews(newNews.get(0).getType(), website.getName(),con);
+						removeOldNewsAndKeep30DaysLatestNews(newNews.get(0).getType(), website.getName(),con);
 					}
 				}
 			} catch (Exception e) {
@@ -301,7 +301,7 @@ public class CollectorManager {
 					log.error("", e);
 				}
 			}
-*/
+
 		} else {
 			log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + website.getName() + " collect " + "0 news ");
 		}
@@ -366,7 +366,7 @@ public class CollectorManager {
 						stm.addBatch();
 					}
 					stm.executeBatch();
-					removeOldNewsAndKeepOnly50LatestNews(website.getNews().get(0).getType(), website.getName(), con);
+					removeOldNewsAndKeep30DaysLatestNews(website.getNews().get(0).getType(), website.getName(), con);
 				}
 			} catch (Exception e) {
 				log.error("", e);
@@ -383,41 +383,26 @@ public class CollectorManager {
 	}
 
 	private void removeDuplicatedNews(Website website) {
-		Set<String> urls = new HashSet<>();
 		List<News> removeIds = new ArrayList<>();
 		for (News n : website.getNews()) {
-			if (urls.contains(n.getUrl())) {
+			if (website.getNews().contains(n)) {
 				removeIds.add(n);
-			} else {
-				urls.add(n.getUrl());
 			}
 		}
 		website.getNews().removeAll(removeIds);
 	}
 
-	private void removeOldNewsAndKeepOnly50LatestNews(String type, String website, Connection con) throws SQLException {
-		String sql = "select id  from news where type='" + type + "' and fromwebsite='" + website
-				+ "'  order by id desc limit " + MAX_OLD_NEWS + "";
+	private void removeOldNewsAndKeep30DaysLatestNews(String type, String website, Connection con) throws SQLException {
 		Statement stm = con.createStatement();
-		ResultSet rs = stm.executeQuery(sql);
-		StringBuilder ids = new StringBuilder();
-		while (rs.next()) {
-			ids.append(rs.getString(1)).append(",");
-		}
-		rs.close();
-		if (ids.length() > 0)
-			ids.deleteCharAt(ids.length() - 1);
-
-		stm.execute("delete from news where type='" + type + "' and fromwebsite='" + website + "' AND id not in("
-				+ ids.toString() + ") ");
+		stm.execute("delete from news where type='" + type + "' and fromwebsite='" + website + "' AND collectedtime > " + (System.currentTimeMillis() - 30*24*60*60*1000));//30days
 		stm.close();
 	}
 
-	public boolean isProcessing() {
+	public synchronized boolean isProcessing() {
 		return processing;
 	}
 
-	public void setProcessing(boolean processing) {
+	public synchronized void setProcessing(boolean processing) {
 		this.processing = processing;
 	}
 

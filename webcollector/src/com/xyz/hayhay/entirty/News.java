@@ -221,7 +221,7 @@ public class News {
 			return false;
 		}
 		News other = (News) obj;
-		double accurate = 0.8;
+		double accurate = 0.8d;
 		if(other.getType()==NewsTypes.TYPE_MUSIC)
 			accurate = 1;
 		if(this.getFromWebSite().equals(other.getFromWebSite())){
@@ -255,6 +255,7 @@ public class News {
 		return false;
 	}
 	public static void main(String args[]){
-		
+		double accurate = 0.8;
+		System.out.println(News.isSiminler("Ông Trump đáp trả đe dọa thử bom H ở Thái Bình Dương của Triều Tiên","Ôdng Trumdp đádp trả đe dọa thử bom H ở Dai Tay Duong của Triều Tiên", accurate));
 	}
 }
