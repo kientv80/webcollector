@@ -47,6 +47,9 @@ public class VnExpressParser extends BaseParser {
 		} else if (url.indexOf("/tin-tuc/the-gioi") > 0){
 			type = NewsTypes.TYPE_TINQUOCTE;
 			parentType = NewsTypes.TYPE_TINQUOCTE;
+		}else if(url.contains("oto-xe-may")){
+			type = NewsTypes.XE;
+			parentType = NewsTypes.XE;
 		}
 		if(type.isEmpty())
 			return null;
@@ -59,7 +62,7 @@ public class VnExpressParser extends BaseParser {
 		Image image = new Image("img", "class", null, false);
 		image.setExcludedTexts("http://st.f1.kinhdoanh.vnecdn.net/i/v4/icons/icon_more.png");
 		image.setValueFromAtttributeName("src");
-		ShotDescription p = new ShotDescription("h2", "class", "description", true);
+		ShotDescription p = new ShotDescription("h4", "class", "description", true);
 		News n = new News();
 		n.setFromWebSite(fromWebsite);
 		n.setHotNews(true);
@@ -87,77 +90,7 @@ public class VnExpressParser extends BaseParser {
 				}
 			}
 		}
-		/*
-		t.setElementAttribute(null);
-		t.setElementValue(null);
-		for (Element midNews : source.getElementById("news_home").getChildElements()) {
-			News mn = new News();
-			mn.setFromWebSite(fromWebsite);
-			mn.setType(type);
-			mn.setParentCateName(parentType);
-			mn.setNewsOrder(News.NEWS_ORDER.HI.name());
-			parseElementToNews(midNews, mn, a, t, image, p);
-			if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
-					&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-				if (!vnExpressNews.contains(mn)) {
-					vnExpressNews.add(mn);
-				}
-			}
-		}
-		if (source.getAllElementsByClass("list_new_140 list_col") != null
-				&& source.getAllElementsByClass("list_new_140 list_col").size() > 0) {
-			for (Element midNews : source.getAllElementsByClass("list_new_140 list_col").get(0).getChildElements()) {
-				News mn = new News();
-				mn.setFromWebSite(fromWebsite);
-				mn.setType(type);
-				mn.setParentCateName(parentType);
-				mn.setNewsOrder(News.NEWS_ORDER.M.name());
-				parseElementToNews(midNews, mn, a, t, image, p);
-				if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
-						&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-					if (!vnExpressNews.contains(mn)) {
-						vnExpressNews.add(mn);
-					}
-				}
-			}
-
-			if (source.getAllElementsByClass("list_new_140 list_col") != null
-					&& source.getAllElementsByClass("list_new_140 list_col").size() > 0) {
-				for (Element midNews : source.getAllElementsByClass("list_new_140 list_col").get(1)
-						.getChildElements()) {
-					News mn = new News();
-					mn.setFromWebSite(fromWebsite);
-					mn.setType(type);
-					mn.setParentCateName(parentType);
-					mn.setNewsOrder(News.NEWS_ORDER.M.name());
-					parseElementToNews(midNews, mn, a, t, image, p);
-					if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null
-							&& !mn.getUrl().isEmpty() && mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-						if (!vnExpressNews.contains(mn)) {
-							vnExpressNews.add(mn);
-						}
-					}
-				}
-			}
-			if (source.getAllElementsByClass("list_new_140 list_col end") != null
-					&& source.getAllElementsByClass("list_new_140 list_col end").size() > 0) {
-				for (Element midNews : source.getAllElementsByClass("list_new_140 list_col end").get(0)
-						.getChildElements()) {
-					News mn = new News();
-					mn.setFromWebSite(fromWebsite);
-					mn.setType(type);
-					mn.setParentCateName(parentType);
-					mn.setNewsOrder(News.NEWS_ORDER.M.name());
-					parseElementToNews(midNews, mn, a, t, image, p);
-					if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null
-							&& !mn.getUrl().isEmpty() && mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-						if (!vnExpressNews.contains(mn)) {
-							vnExpressNews.add(mn);
-						}
-					}
-				}
-			}
-		}*/
+		
 		return vnExpressNews;
 	}
 }

@@ -20,8 +20,8 @@ public class FoxNewsParser extends BaseParser {
 		List<News> news = new ArrayList<>();
 		List<Element> newsFeed = source.getAllElementsByClass("news-feed");
 		List<Element> articles = null;
-		if ((url.endsWith("tech.html") || url.endsWith("science.html") || url.endsWith("health.html") || url.endsWith("politics.html")) && source.getElementById("content") != null) {
-			articles = source.getElementById("content").getAllElements("article");
+		if ((url.trim().endsWith("tech.html") || url.endsWith("science.html") || url.endsWith("health.html") || url.endsWith("politics.html"))) {
+			articles = source.getAllElementsByClass("content article-list").get(0).getAllElements("article");
 		} else if (newsFeed != null && !newsFeed.isEmpty()) {
 			articles = newsFeed.get(0).getAllElements("article");
 		}

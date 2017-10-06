@@ -10,7 +10,8 @@ import com.xyz.hayhay.website.parser.NYTimesParser;
 import net.htmlparser.jericho.Source;
 
 public class TechNewsCollector extends ArticleCollector {
-	String[] urls = new String[] { "http://www.foxnews.com/tech.html", "https://www.nytimes.com/section/technology?src=busfn"};
+	String[] urls = new String[] { "http://www.foxnews.com/tech.html", 
+									"https://www.nytimes.com/section/technology?src=busfn"};
 
 	public TechNewsCollector(long repeatTime) {
 		super(repeatTime);

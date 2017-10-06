@@ -9,7 +9,7 @@ import com.xyz.hayhay.website.parser.TuoiTreParser;
 import net.htmlparser.jericho.Source;
 
 public class KinhTeCollector extends ArticleCollector {
-	String[] urls = new String[] { "http://petrotimes.vn/kinh-te", "http://tuoitre.vn/tin/kinh-te" };
+	String[] urls = new String[] { "http://petrotimes.vn/kinh-te", "http://tuoitre.vn/kinh-doanh.htm" };
 
 	public KinhTeCollector(long repeatTime) {
 		super(repeatTime);

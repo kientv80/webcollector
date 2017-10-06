@@ -26,11 +26,16 @@ public class SportNewsCollector extends ArticleCollector {
 			"http://www.24h.com.vn/bong-da-c48.html",
 			"http://www.24h.com.vn/su-kien-binh-luan-c447.html",
 			"http://www.24h.com.vn/anh-bong-da-nguoi-dep-c507.html", "http://bongda24h.vn",
-			"http://thethao247.vn/quan-vot-c4/", "http://thethaotv.vn/bong-da", "http://thethaotv.vn/tennis",
-			"http://thethaotv.vn/golf", "http://thethaotv.vn/hau-truong" };
+			 "http://thethaotv.vn/bong-da-viet-nam","http://thethaotv.vn/bong-da-quoc-te", "http://thethaotv.vn/tennis",
+			 "http://thethaotv.vn/hau-truong" };
 
 	private List<News> collectFrom24h(Source s, String url, String fromWebsite) {
-		return new Web24HParser().collectArticle(s, url, fromWebsite);
+		if(url.contains("thethaotv.vn")){
+			return new TheThaoTVParser().collectArticle(s, url, fromWebsite);
+		}else{
+			return new Web24HParser().collectArticle(s, url, fromWebsite);
+		}
+		
 	}
 
 	private List<News> collectFromBongda24h(Source s, String url, String fromWeb) {

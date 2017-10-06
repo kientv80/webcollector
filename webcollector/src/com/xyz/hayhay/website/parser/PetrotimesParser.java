@@ -25,7 +25,7 @@ public class PetrotimesParser extends BaseParser {
 		ShotDescription p = new ShotDescription("p", "itemprop", "description", true);
 		List<News> news = new ArrayList<>();
 
-		Element hot = s.getAllElementsByClass("col_coverage clearfix").get(0);
+		Element hot = s.getAllElementsByClass("fullboxNewsHotItem clearfix").get(0);
 		News hotN = new News();
 		hotN.setFromWebSite(fromWeb);
 		hotN.setType(NewsTypes.TYPE_KINHTE);
@@ -38,7 +38,7 @@ public class PetrotimesParser extends BaseParser {
 			}
 		}
 
-		for (Element e : s.getAllElementsByClass("coverage_news_small list_news_small clearfix").get(0)
+		for (Element e : s.getAllElementsByClass("listINewsHotListing clearfix").get(0)
 				.getChildElements().get(0).getChildElements()) {
 			News n = new News();
 			n.setFromWebSite(fromWeb);
@@ -53,7 +53,7 @@ public class PetrotimesParser extends BaseParser {
 			}
 		}
 
-		for (Element e : s.getAllElementsByClass("news_item clearfix")) {
+		for (Element e : s.getAllElementsByClass("boxlistingNewsgr").get(0).getAllElements("li")) {
 			News n = new News();
 			n.setFromWebSite(fromWeb);
 			n.setType(NewsTypes.TYPE_KINHTE);

@@ -58,7 +58,6 @@ public class WebCollector {
 		//Collect News
 		CollectorManager cMng = CollectorManager.getInstance();
 		cMng.register(new BatDongSanCollector(ONE_HOUR));
-		cMng.register(new FilmCollector(FOUR_HOURS));
 		cMng.register(new FunyStoryCollector(FOUR_HOURS));
 		cMng.register(new ICTNewsCollector(FIFTEEN_MINUTES));
 		cMng.register(new KhoiNghiepCollector(THIRTY_MINUTES));
@@ -68,7 +67,6 @@ public class WebCollector {
 		cMng.register(new MusicCollector(ONE_HOUR));
 		cMng.register(new NauAnCollector(EIGHT_HOURS));
 		cMng.register(new NgoiSaoCollector(FIFTEEN_MINUTES));
-		//cMng.register(new PcworldCollector(ONE_HOUR));
 		cMng.register(new SportNewsCollector(FIFTEEN_MINUTES));
 		cMng.register(new SucKhoeDoiSongNewsCollector(ONE_HOUR));
 		cMng.register(new SucKhoeNewsCollector(ONE_HOUR));
@@ -79,8 +77,6 @@ public class WebCollector {
 		cMng.register(new XeCollector(FOUR_HOURS));
 		cMng.register(new KinhDoanhCollector(ONE_HOUR));
 		
-		cMng.register(new XoSoKienThietCollector(ONE_HOUR));
-		
 		cMng.register(new BusinessNewsCollector(ONE_HOUR));
 		cMng.register(new TechNewsCollector(ONE_HOUR));
 		cMng.register(new ScienceNewsCollector(ONE_HOUR));
@@ -88,12 +84,12 @@ public class WebCollector {
 		cMng.register(new PoliticsCollector(ONE_HOUR));
 		
 		//		Collect TV Schedule
-		VTVProgramCollector vtv = new VTVProgramCollector();
-		VTVCabCollector vtvCab = new VTVCabCollector();
-		HaNoiTVCollector bv = new HaNoiTVCollector();
-		scheduler.scheduleAtFixedRate(vtv, 3600, FOUR_HOURS, TimeUnit.SECONDS);
-		scheduler.scheduleAtFixedRate(vtvCab, 2*60, FOUR_HOURS, TimeUnit.SECONDS);
-		scheduler.scheduleAtFixedRate(bv, 6*60, FOUR_HOURS, TimeUnit.SECONDS);
+//		VTVProgramCollector vtv = new VTVProgramCollector();
+//		VTVCabCollector vtvCab = new VTVCabCollector();
+//		HaNoiTVCollector bv = new HaNoiTVCollector();
+//		scheduler.scheduleAtFixedRate(vtv, 3600, FOUR_HOURS, TimeUnit.SECONDS);
+//		scheduler.scheduleAtFixedRate(vtvCab, 2*60, FOUR_HOURS, TimeUnit.SECONDS);
+//		scheduler.scheduleAtFixedRate(bv, 6*60, FOUR_HOURS, TimeUnit.SECONDS);
 		
 
 		cMng.startCollectorManager();

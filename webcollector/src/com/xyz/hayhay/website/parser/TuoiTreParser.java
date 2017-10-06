@@ -90,34 +90,7 @@ public class TuoiTreParser extends BaseParser {
 			}
 		}
 
-		/*for (Element midNews : source.getElementById("newhot_most_content").getChildElements()) {
-			News mn = new News();
-			mn.setFromWebSite(fromWebsite);
-			mn.setType(type);
-			mn.setNewsOrder(News.NEWS_ORDER.HI.name());
-			mn.setParentCateName(parentCate);
-			parseElementToNews(midNews, mn, a, t, image, p);
-			if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
-					&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-				if (tuoitreNews.size() < 10 && !tuoitreNews.contains(mn)) {
-					tuoitreNews.add(mn);
-				}
-			}
-		}
-		for (Element midNews : source.getAllElementsByClass("list-media list-media-1").get(0).getChildElements()) {
-			News mn = new News();
-			mn.setFromWebSite(fromWebsite);
-			mn.setType(type);
-			mn.setNewsOrder(News.NEWS_ORDER.HI.name());
-			mn.setParentCateName(parentCate);
-			parseElementToNews(midNews, mn, a, t, image, p);
-			if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
-					&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-				if (tuoitreNews.size() < MAX_NEWS_ON_CATE && !tuoitreNews.contains(mn)) {
-					tuoitreNews.add(mn);
-				}
-			}
-		}*/
+		
 		return tuoitreNews;
 	}
 }

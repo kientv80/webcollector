@@ -18,7 +18,7 @@ public class TheThaoTVParser extends BaseParser {
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		// Collect in 24h.com first
-		ShotDescription p = new ShotDescription("p", "class", "entry-des", true);
+		ShotDescription p = new ShotDescription("a", "class", "title_item_cate mar_top10 mar_bottom10", true);
 		Title title = new Title("a", null, null, false);
 		title.setValueFromAtttributeName("title");
 
@@ -39,7 +39,7 @@ public class TheThaoTVParser extends BaseParser {
 	private List<News> collectNews(String type, ShotDescription p, Title title, String fromWeb, Source s2) {
 		List<News> sportNews = new ArrayList<>();
 		// minify_fix_1 -> list ->item
-		List<Element> items = s2.getElementById("minify_fix_1").getChildElements().get(0).getChildElements();
+		List<Element> items = s2.getElementById("list_item_cate").getAllElements("li");
 		for (Element item : items) {
 			News n = new News();
 			n.setShotDesc("");
@@ -53,23 +53,7 @@ public class TheThaoTVParser extends BaseParser {
 				}
 			}
 		}
-		// td-category-list
-		items = s2.getAllElementsByClass("td-category-list").get(0).getChildElements();
-		if (items != null && items.size() > 0) {
-			for (Element item : items) {
-				News n = new News();
-				n.setShotDesc("");
-				n.setFromWebSite(fromWeb);
-				n.setType(type);
-				n.setParentCateName(NewsTypes.TYPE_SPORTNEWS);
-				parseElementToNews(item, n, new A(), title, new Image(), p);
-				if (n.getTitle() != null && n.getUrl() != null && n.getImageUrl() != null) {
-					if (!sportNews.contains(n)) {
-						sportNews.add(n);
-					}
-				}
-			}
-		}
+		
 		return sportNews;
 	}
 }

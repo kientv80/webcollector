@@ -22,6 +22,7 @@ public class ZingParser  extends BaseParser{
 		Title t = new Title("img", null, null, false);
 		t.setValueFromAtttributeName("title");
 		Image image = new Image();
+		image.setDomain("https:");
 		ShotDescription desc = new ShotDescription("p", "class", "summary", true);
 		String type = NewsTypes.XEMAY;
 		if (url.indexOf("o-to.html") > 0)
