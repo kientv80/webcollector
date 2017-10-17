@@ -30,7 +30,7 @@ public class NYTimesParser extends BaseParser {
 		if (articles != null && !articles.isEmpty()) {
 
 			for (Element article : articles) {
-				News n = new News();
+				News n = new News(News.COUNTRY.US.name());
 				n.setFromWebSite(fromWebsite);
 				if (url.contains("business")) {
 					n.setType(NewsTypes.WN_BIZ);

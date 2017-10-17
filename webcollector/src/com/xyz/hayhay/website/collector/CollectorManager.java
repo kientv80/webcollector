@@ -279,7 +279,7 @@ public class CollectorManager {
 
 					if (newNews.size() > 0) {
 						try (PreparedStatement stm = con.prepareStatement(
-								"insert into news(title,shotdesc,url,fromwebsite,imageurl,type,ishotnews,newsorder,collectedtime,title_id,parent_catename)values(?,?,?,?,?,?,?,?,?,?,?)")) {
+								"insert into news(title,shotdesc,url,fromwebsite,imageurl,type,ishotnews,newsorder,collectedtime,title_id,parent_catename,country)values(?,?,?,?,?,?,?,?,?,?,?,?)")) {
 							for (News n : newNews) {
 								stm.clearParameters();
 								stm.setString(1, n.getTitle());
@@ -293,6 +293,7 @@ public class CollectorManager {
 								stm.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
 								stm.setString(10, n.getUniqueName());
 								stm.setString(11, n.getParentCateName());
+								stm.setString(12, n.getCountry());
 								stm.addBatch();
 							}
 							stm.executeBatch();

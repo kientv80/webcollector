@@ -4,15 +4,16 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 public class News {
-	
-	
-	
-	
-	
-	
+	public static enum COUNTRY{VN,US}
 	public static enum NEWS_ORDER {H,HI,M};//hotnews,highlight news, mid news
 	
+	public News(){
+		this.country=News.COUNTRY.VN.name();
+	}
 	
+	public News(String country){
+		this.country = country;
+	}
 	/**
 	 * @return the title
 	 */
@@ -257,5 +258,13 @@ public class News {
 	public static void main(String args[]){
 		double accurate = 0.8;
 		System.out.println(News.isSiminler("Ông Trump đáp trả đe dọa thử bom H ở Thái Bình Dương của Triều Tiên","Ôdng Trumdp đádp trả đe dọa thử bom H ở Dai Tay Duong của Triều Tiên", accurate));
+	}
+	private String country;
+	public String getCountry() {
+		// TODO Auto-generated method stub
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
 	}
 }

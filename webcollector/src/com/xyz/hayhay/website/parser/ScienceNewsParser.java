@@ -28,7 +28,7 @@ public class ScienceNewsParser extends BaseParser{
 			Image i = new Image();
 			ShotDescription p = new ShotDescription("div", "class", "content clearfix", true);
 			for(Element article : articles){
-				News n = new News();
+				News n = new News(News.COUNTRY.US.name());
 				n.setFromWebSite(fromWebsite);
 				n.setType(NewsTypes.WN_SIENCE);
 				n.setParentCateName(NewsTypes.WN_SIENCE);

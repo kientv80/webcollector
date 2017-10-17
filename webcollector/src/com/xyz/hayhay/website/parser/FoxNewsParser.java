@@ -39,7 +39,7 @@ public class FoxNewsParser extends BaseParser {
 			i.setDomain("http:");
 			ShotDescription p = new ShotDescription("p", null, null, true);
 			for (Element article : articles) {
-				News n = new News();
+				News n = new News(News.COUNTRY.US.name());
 				n.setFromWebSite(fromWebsite);
 				if (fromWebsite.contains("foxbusiness")) {
 					n.setType(NewsTypes.WN_BIZ);

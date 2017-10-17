@@ -39,7 +39,7 @@ public class ZingParser  extends BaseParser{
 			News n = new News();
 			n.setFromWebSite("news.zing.vn");
 			n.setType(type);
-			n.setParentCateName("XE");
+			n.setParentCateName(NewsTypes.XE);
 			parseElementToNews(article, n, a, t, image, desc);
 			if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
 					&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {
