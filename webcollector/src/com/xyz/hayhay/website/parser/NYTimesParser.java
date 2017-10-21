@@ -33,20 +33,20 @@ public class NYTimesParser extends BaseParser {
 				News n = new News(News.COUNTRY.US.name());
 				n.setFromWebSite(fromWebsite);
 				if (url.contains("business")) {
-					n.setType(NewsTypes.WN_BIZ);
-					n.setParentCateName(NewsTypes.WN_BIZ);
+					n.setType(NewsTypes.TYPE.Business.name());
+					n.setParentCateName(NewsTypes.CATEGORY.Business.name());
 				} else if (url.endsWith("science")) {
-					n.setType(NewsTypes.WN_SIENCE);
-					n.setParentCateName(NewsTypes.WN_SIENCE);
+					n.setType(NewsTypes.TYPE.Science.name());
+					n.setParentCateName(NewsTypes.CATEGORY.Tech.name());
 				}else if (url.endsWith("health")) {
-					n.setType(NewsTypes.WN_HEALTH);
-					n.setParentCateName(NewsTypes.WN_HEALTH);
+					n.setType(NewsTypes.TYPE.Health.name());
+					n.setParentCateName(NewsTypes.CATEGORY.Health.name());
 				}else if (url.endsWith("politics/index.html")) {
-					n.setType(NewsTypes.WN_POLITICS);
-					n.setParentCateName(NewsTypes.WN_POLITICS);
+					n.setType(NewsTypes.TYPE.Politics.name());
+					n.setParentCateName(NewsTypes.CATEGORY.HotNews.name());
 				}else if (url.contains("technology")) {
-					n.setType(NewsTypes.WN_TECH);
-					n.setParentCateName(NewsTypes.WN_TECH);
+					n.setType(NewsTypes.TYPE.Tech.name());
+					n.setParentCateName(NewsTypes.CATEGORY.Tech.name());
 				}
 				parseElementToNews(article, n, a, title, i, p);
 				if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null

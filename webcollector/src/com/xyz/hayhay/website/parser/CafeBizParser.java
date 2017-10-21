@@ -17,39 +17,28 @@ public class CafeBizParser extends BaseParser{
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		String type = "";
-		String parentCate = "";
+		String parentCate = NewsTypes.CATEGORY.Business.name();
 		if(url.contains("nhan-vat.chn")){
-			type = NewsTypes.NHAN_VAT;
-			parentCate = NewsTypes.KINH_DOANH;
+			type = NewsTypes.TYPE.Figure.name();
 		}else if(url.contains("quan-tri.chn")){
-			type = NewsTypes.QUAN_TRI;
-			parentCate = NewsTypes.KINH_DOANH;
+			type = NewsTypes.TYPE.Management.name();
 		}else if(url.contains("nghe-nghiep.chn")){
-			type = NewsTypes.NGHE_NGHIEP;
-			parentCate = NewsTypes.KINH_DOANH;
+			type = NewsTypes.TYPE.Job.name();
 		}else if(url.contains("thuong-hieu.chn")){
-			type = NewsTypes.THUONG_HIEU;
-			parentCate = NewsTypes.KINH_DOANH;
+			type = NewsTypes.TYPE.Trademark.name();
 		}else if(url.contains("welearn.chn")){
-			type = NewsTypes.KINH_NHIEM_KINH_DOANH;
-			parentCate = NewsTypes.KINH_DOANH;
+			type = NewsTypes.TYPE.Experience.name();
 		}else if(url.contains("tai-chinh.chn")){
-			type = NewsTypes.TAICHINH;
-			parentCate = NewsTypes.TYPE_ECONOMY;
+			type = NewsTypes.TYPE.Finance.name();
+			parentCate = NewsTypes.CATEGORY.Economic.name();
 		}else if(url.contains("chinh-sach.chn")){
-			type = NewsTypes.CHINHSACH;
-			parentCate = NewsTypes.TYPE_ECONOMY;
+			type = NewsTypes.TYPE.Economic.name();
+			parentCate = NewsTypes.CATEGORY.Economic.name();
 		}else if(url.contains("startup.chn")){
-			type = NewsTypes.KHOINGHIEP;
-			parentCate = NewsTypes.KHOINGHIEP;
+			type = NewsTypes.TYPE.StatUp.name();
 		}else if(url.contains("doanh-nghiep-cong-nghe.chn")){
-			type = NewsTypes.DOANH_NGHIEP;
-			parentCate = NewsTypes.TYPE_CONGNGHE;
-		}else if(url.contains("suc-khoe.chn")){
-			type = NewsTypes.TYPE_SUCKHOE;
-			parentCate = NewsTypes.TYPE_SUCKHOE;
+			type = NewsTypes.TYPE.Company.name();
 		}
-		
 		if(type.isEmpty() || parentCate.isEmpty())
 			return null;
 		A a = new A();

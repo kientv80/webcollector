@@ -26,11 +26,11 @@ public class BizLiveParser extends BaseParser {
 		image.setValueFromAtttributeName("src");
 		ShotDescription p = new ShotDescription("span", "class", "imgtitle", true);
 		List<News> news = new ArrayList<>();
-		String type = NewsTypes.TAICHINH;
+		String type = NewsTypes.TYPE.Finance.name();
 		if (url.contains("vang-tien")) {
-			type = NewsTypes.THITRUONGVANG;
+			type = NewsTypes.TYPE.Gold.name();
 		} else if (url.contains("chung-khoan")) {
-			type = NewsTypes.CHUNGKHOAN;
+			type = NewsTypes.TYPE.Stock.name();
 		}
 		if (s.getAllElementsByClass("col-440") != null && s.getAllElementsByClass("col-440").size() > 0) {
 			Element topNews = s.getAllElementsByClass("col-440").get(0);
@@ -40,7 +40,7 @@ public class BizLiveParser extends BaseParser {
 			mn.setType(type);
 			mn.setNewsOrder(News.NEWS_ORDER.HI.name());
 			mn.setHotNews(true);
-			mn.setParentCateName(NewsTypes.TYPE_ECONOMY);
+			mn.setParentCateName(NewsTypes.CATEGORY.Economic.name());
 			parseElementToNews(hotNews, mn, a, t, image, p);
 			if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
 					&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
@@ -54,7 +54,7 @@ public class BizLiveParser extends BaseParser {
 				mdnew.setFromWebSite(fromWebsite);
 				mdnew.setType(type);
 				mdnew.setNewsOrder(News.NEWS_ORDER.HI.name());
-				mdnew.setParentCateName(NewsTypes.TYPE_ECONOMY);
+				mdnew.setParentCateName(NewsTypes.CATEGORY.Economic.name());
 				parseElementToNews(mdnews, mdnew, a, t, image, null);
 				if (mdnew.getTitle() != null && !mdnew.getTitle().isEmpty() && mdnew.getUrl() != null
 						&& !mdnew.getUrl().isEmpty() && mdnew.getImageUrl() != null && !mdnew.getImageUrl().isEmpty()) {
@@ -70,7 +70,7 @@ public class BizLiveParser extends BaseParser {
 				mdnew.setFromWebSite(fromWebsite);
 				mdnew.setType(type);
 				mdnew.setNewsOrder(News.NEWS_ORDER.HI.name());
-				mdnew.setParentCateName(NewsTypes.TYPE_ECONOMY);
+				mdnew.setParentCateName(NewsTypes.CATEGORY.Economic.name());
 				parseElementToNews(mdnews, mdnew, a, t, image, null);
 				if (mdnew.getTitle() != null && !mdnew.getTitle().isEmpty() && mdnew.getUrl() != null
 						&& !mdnew.getUrl().isEmpty() && mdnew.getImageUrl() != null && !mdnew.getImageUrl().isEmpty()) {

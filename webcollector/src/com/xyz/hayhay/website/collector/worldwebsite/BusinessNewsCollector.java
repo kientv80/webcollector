@@ -10,7 +10,7 @@ import com.xyz.hayhay.website.parser.NYTimesParser;
 import net.htmlparser.jericho.Source;
 
 public class BusinessNewsCollector extends ArticleCollector {
-	String[] urls = new String[] { "http://www.foxbusiness.com/", "http://www.nytimes.com/pages/business/index.html",
+	String[] urls = new String[] { "http://www.foxbusiness.com/markets.html", "http://www.nytimes.com/pages/business/index.html",
 			"http://money.cnn.com/news/" };
 
 	public BusinessNewsCollector(long repeatTime) {

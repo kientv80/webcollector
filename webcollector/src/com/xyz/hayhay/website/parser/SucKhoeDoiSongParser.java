@@ -28,15 +28,15 @@ public class SucKhoeDoiSongParser extends BaseParser{
 		String type = "";
 		List<News> news = new ArrayList<>();
 		if (url.indexOf("y-hoc-co-truyen-c9") > 0) {
-			type = NewsTypes.YHOCCOTRUYEN;
+			type = NewsTypes.TYPE.MedicineFood.name();
 		} else if (url.indexOf("bai-thuoc-dan-gian-c45") > 0) {
-			type = NewsTypes.BAITHUOC;
+			type = NewsTypes.TYPE.MedicineFood.name();
 		} else if (url.indexOf("cay-thuoc-quanh-ta-c4") > 0) {
-			type = NewsTypes.THUOCQUANHTA;
+			type = NewsTypes.TYPE.MedicineFood.name();
 		} else if (url.indexOf("am-thuc-c44") > 0) {
-			type = NewsTypes.AMTHUC;
+			type = NewsTypes.TYPE.HealthyFood.name();
 		} else if (url.indexOf("dinh-duong-c38") > 0) {
-			type = NewsTypes.DINHDUONG;
+			type = NewsTypes.TYPE.HealthyFood.name();
 		}
 		collectNews(source, type, a, t, image, p, div, news, url,fromWebsite);
 		return news;
@@ -49,7 +49,7 @@ public class SucKhoeDoiSongParser extends BaseParser{
 			News topNews = new News();
 			topNews.setFromWebSite(website);
 			topNews.setType(type);
-			topNews.setParentCateName(NewsTypes.TYPE_SUCKHOE);
+			topNews.setParentCateName(NewsTypes.CATEGORY.Health.name());
 			parseElementToNews(top, topNews, a, t, image, p);
 			if (topNews.getImageUrl() != null && !topNews.getImageUrl().isEmpty() && topNews.getTitle() != null
 					&& !topNews.getTitle().isEmpty()) {
@@ -64,7 +64,7 @@ public class SucKhoeDoiSongParser extends BaseParser{
 				News article = new News();
 				article.setFromWebSite(website);
 				article.setType(type);
-				article.setParentCateName(NewsTypes.TYPE_SUCKHOE);
+				article.setParentCateName(NewsTypes.CATEGORY.Health.name());
 				parseElementToNews(n, article, a, t, image, div);
 				if (article.getImageUrl() != null && !article.getImageUrl().isEmpty() && article.getTitle() != null
 						&& !article.getTitle().isEmpty()) {

@@ -25,19 +25,19 @@ public class Web24HParser extends BaseParser{
 		A a = new A();
 		a.setDomain("http://www.24h.com.vn/");
 		String type = "";
-		type = NewsTypes.SHOWBIZVIET;
-		String parentType = NewsTypes.NGOISAO;
+		type = NewsTypes.TYPE.FamousPerson.name();
+		String parentType = NewsTypes.CATEGORY.Entertainment.name();
 		
 		if (url.indexOf("doi-song-showbiz-c729.html") > 0) {
-			type = NewsTypes.SHOWBIZVIET;
+			type = NewsTypes.TYPE.FamousPerson.name();
 		} else if (url.contains("thoi-trang-c78.html"))
-			type = NewsTypes.PHONGCACH;
+			type = NewsTypes.TYPE.Style.name();
 		else if (url.contains("bong-da-c48.html") || url.contains("su-kien-binh-luan-c447.html")){
-			type = NewsTypes.BONGDA;
-			parentType = NewsTypes.TYPE_SPORTNEWS;
+			type = NewsTypes.TYPE.Football.name();
+			parentType = NewsTypes.CATEGORY.Sport.name();
 		} else if (url.contains("anh-bong-da-nguoi-dep-c507.html")){
-			type = NewsTypes.HAUTRUONG;
-			parentType = NewsTypes.TYPE_SPORTNEWS;
+			type = NewsTypes.TYPE.BehindTheScenes.name();
+			parentType = NewsTypes.CATEGORY.Entertainment.name();
 		}
 		
 		List<News> ngoisao = new ArrayList<>();

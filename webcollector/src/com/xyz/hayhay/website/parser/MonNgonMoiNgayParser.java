@@ -20,23 +20,23 @@ public class MonNgonMoiNgayParser extends BaseParser{
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		String type = "";
 		if (url.indexOf("thit-heo") > 0) {
-			type = NewsTypes.NAUAN_HEO;
+			type = NewsTypes.TYPE.CookingPig.name();
 		} else if (url.indexOf("thit-ga") > 0) {
-			type = NewsTypes.NAUAN_GA;
+			type = NewsTypes.TYPE.CookingHen.name();
 		} else if (url.indexOf("thit-bo") > 0) {
-			type = NewsTypes.NAUAN_BO;
+			type = NewsTypes.TYPE.CookingCow.name();
 		} else if (url.indexOf("mon-ngon-tu-ca") > 0) {
-			type = NewsTypes.NAUAN_CA;
+			type = NewsTypes.TYPE.CookingFish.name();
 		} else if (url.indexOf("mon-ngon-tu-muc") > 0) {
-			type = NewsTypes.NAUAN_MUC;
+			type = NewsTypes.TYPE.CookingFish.name();
 		} else if (url.indexOf("mon-ngon-tu-tom") > 0) {
-			type = NewsTypes.NAUAN_TOM;
+			type = NewsTypes.TYPE.CookingShrimp.name();
 		} else if (url.indexOf("hai-san-khac") > 0) {
-			type = NewsTypes.NAUAN_HAISANKHAC;
+			type = NewsTypes.TYPE.CookingFish.name();
 		} else if (url.indexOf("mon-ngon-tu-nam") > 0) {
-			type = NewsTypes.NAUAN_NAM;
+			type = NewsTypes.TYPE.CookingVegetable.name();
 		} else if (url.indexOf("mon-ngon-tu-dau-hu") > 0) {
-			type = NewsTypes.NAUAN_DAUHU;
+			type = NewsTypes.TYPE.CookingVegetarian.name();
 		}
 		return collectNews(type, source, fromWebsite);
 	}
@@ -51,7 +51,7 @@ public class MonNgonMoiNgayParser extends BaseParser{
 			News n = new News();
 			n.setFromWebSite(fromWebsite);
 			n.setType(type);
-			n.setParentCateName(NewsTypes.NAUAN);
+			n.setParentCateName(NewsTypes.CATEGORY.Cooking.name());
 			parseElementToNews(e, n, a, t, i, d);
 			if (!nauannews.contains(n) && n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
 					&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()) {

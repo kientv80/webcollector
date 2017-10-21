@@ -27,13 +27,13 @@ public class DanTriParser  extends BaseParser{
 		ShotDescription p = new ShotDescription("div", "class", "fon5 wid324 fl", true);
 		String type = "";
 		if (url.indexOf("tinh-yeu-gioi-tinh.htm") > 0) {
-			type = NewsTypes.GIOITINH;
+			type = NewsTypes.TYPE.Gender.name();
 		} else if (url.indexOf("gia-dinh.htm") > 0) {
-			type = NewsTypes.GIADINH;
+			type = NewsTypes.TYPE.Family.name();
 		} else if (url.indexOf("goc-tam-hon.htm") > 0) {
-			type = NewsTypes.GOCTAMHON;
+			type = NewsTypes.TYPE.Soul.name();
 		} else {
-			type = NewsTypes.TINHYEU;
+			type = NewsTypes.TYPE.Love.name();
 		}
 		List<News> tinhYeuNews = new ArrayList<>();
 		List<Element> elements = source.getAllElementsByClass("fl wid470").get(0).getChildElements();
@@ -41,7 +41,7 @@ public class DanTriParser  extends BaseParser{
 			for (Element e : e0.getChildElements()) {
 				News n = new News();
 				n.setFromWebSite(fromWebsite);
-				n.setParentCateName(NewsTypes.TINHYEU);
+				n.setParentCateName(NewsTypes.CATEGORY.Love.name());
 				n.setType(type);
 				parseElementToNews(e, n, a, t, image, p);
 				if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()

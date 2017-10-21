@@ -30,8 +30,8 @@ public class ScienceNewsParser extends BaseParser{
 			for(Element article : articles){
 				News n = new News(News.COUNTRY.US.name());
 				n.setFromWebSite(fromWebsite);
-				n.setType(NewsTypes.WN_SIENCE);
-				n.setParentCateName(NewsTypes.WN_SIENCE);
+				n.setType(NewsTypes.TYPE.Science.name());
+				n.setParentCateName(NewsTypes.CATEGORY.Tech.name());
 				parseElementToNews(article, n, a, title, i, p);
 				if (!news.contains(n) && n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
 						&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()) {

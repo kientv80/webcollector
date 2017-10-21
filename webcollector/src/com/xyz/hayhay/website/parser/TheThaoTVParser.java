@@ -25,13 +25,13 @@ public class TheThaoTVParser extends BaseParser {
 		String type = "";
 		type = "";
 		if (url.indexOf("bong-da") > 0) {
-			type = NewsTypes.BONGDA;
+			type = NewsTypes.TYPE.Football.name();
 		} else if (url.indexOf("tennis") > 0) {
-			type = NewsTypes.TENNIS;
+			type = NewsTypes.TYPE.Tennis.name();
 		} else if (url.indexOf("golf") > 0) {
-			type = NewsTypes.GOLF;
+			type = NewsTypes.TYPE.Golf.name();
 		} else if (url.indexOf("hau-truong") > 0) {
-			type = NewsTypes.HAUTRUONG;
+			type = NewsTypes.TYPE.BehindTheScenes.name();
 		}
 		return collectNews(type, p, title, fromWebsite, source);
 	}
@@ -45,7 +45,7 @@ public class TheThaoTVParser extends BaseParser {
 			n.setShotDesc("");
 			n.setFromWebSite(fromWeb);
 			n.setType(type);
-			n.setParentCateName(NewsTypes.TYPE_SPORTNEWS);
+			n.setParentCateName(NewsTypes.CATEGORY.Sport.name());
 			parseElementToNews(item, n, new A(), title, new Image(), p);
 			if (n.getTitle() != null && n.getUrl() != null && n.getImageUrl() != null) {
 				if (!sportNews.contains(n)) {

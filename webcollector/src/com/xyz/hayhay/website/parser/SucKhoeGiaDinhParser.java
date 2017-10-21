@@ -33,10 +33,10 @@ public class SucKhoeGiaDinhParser  extends BaseParser{
 				n.setImageUrl(imageUrl);
 				n.setFromWebSite(fromWebsite);
 				n.setUrl(url);
-				n.setParentCateName(NewsTypes.TYPE_SUCKHOE);
+				n.setParentCateName(NewsTypes.CATEGORY.Health.name());
 				if (count == 0)
 					n.setHotNews(true);
-				n.setType(NewsTypes.TYPE_SUCKHOE);
+				n.setType(NewsTypes.TYPE.Health.name());
 				if (!suckhoe.contains(n))
 					suckhoe.add(n);
 

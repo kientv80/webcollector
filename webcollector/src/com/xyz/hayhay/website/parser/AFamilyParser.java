@@ -28,48 +28,48 @@ public class AFamilyParser extends BaseParser{
 		String type = "";
 		String parentType = "";
 		if(url.endsWith("tinh-yeu-hon-nhan.chn")){
-			type = NewsTypes.TINHYEU;
-			parentType = NewsTypes.TINHYEU;
+			type = NewsTypes.TYPE.Love.name();
+			parentType = NewsTypes.CATEGORY.Love.name();
 			articles = source.getAllElementsByClass("list-news1").get(0).getChildElements();
 		}else if(url.endsWith("me-va-be.chn")){
-			type = NewsTypes.MEVABE;
-			parentType = NewsTypes.GIADINH;
+			type = NewsTypes.TYPE.Family.name();
+			parentType = NewsTypes.CATEGORY.Love.name();
 			articles = source.getAllElementsByClass("list-news1").get(0).getChildElements();
 		}else if(url.endsWith("suc-khoe.chn")){
-			type = NewsTypes.TYPE_SUCKHOE;
-			parentType = NewsTypes.TYPE_SUCKHOE;
+			type = NewsTypes.TYPE.Health.name();
+			parentType = NewsTypes.CATEGORY.Health.name();
 			articles = source.getAllElementsByClass("list-news1").get(0).getChildElements();
 		} else{//expect this is cooking
 			if(url.endsWith("mon-an-tu-thit-heo.htm")){
-				type = NewsTypes.NAUAN_HEO;
-				parentType = NewsTypes.NAUAN;
+				type = NewsTypes.TYPE.CookingPig.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();
 			}else if(url.endsWith("mon-an-tu-thit-ga.htm")){
-				type = NewsTypes.NAUAN_GA;
-				parentType = NewsTypes.NAUAN;
+				type = NewsTypes.TYPE.CookingHen.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}else if(url.endsWith("mon-an-tu-tom.htm")){
-				type = NewsTypes.NAUAN_TOM;
-				parentType = NewsTypes.NAUAN;
+				type = NewsTypes.TYPE.CookingShrimp.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}else if(url.endsWith("mon-an-tu-rau-cu.htm")){
-				type = NewsTypes.NAUAN_RAUCU;
-				parentType = NewsTypes.NAUAN;
+				type = NewsTypes.TYPE.CookingVegetable.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}else if(url.endsWith("mon-an-tu-trung.htm")){
-				type = NewsTypes.NAUAN_TRUNG;
-				parentType = NewsTypes.NAUAN;
+				type = NewsTypes.TYPE.CookingEgg.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}else if(url.endsWith("mon-an-y.htm")){
-				type = NewsTypes.NAUAN_MONY;
-				parentType = NewsTypes.NAUAN_CACNUOC;
+				type = NewsTypes.TYPE.CookingItaly.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}else if(url.endsWith("mon-an-han-quoc.htm")){
-				type = NewsTypes.NAUAN_MONHAN;
-				parentType = NewsTypes.NAUAN_CACNUOC;
+				type = NewsTypes.TYPE.CookingKorea.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}else if(url.endsWith("mon-an-nhat-ban.htm")){
-				type = NewsTypes.NAUAN_MONNHAT;
-				parentType = NewsTypes.NAUAN_CACNUOC;
+				type = NewsTypes.TYPE.CookingJapan.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}else if(url.endsWith("mon-an-thai-lan.htm")){
-				type = NewsTypes.NAUAN_MONTHAI;
-				parentType = NewsTypes.NAUAN_CACNUOC;
+				type = NewsTypes.TYPE.CookingThai.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}else if(url.endsWith("mon-an-phap.htm")){
-				type = NewsTypes.NAUAN_MONPHAP;
-				parentType = NewsTypes.NAUAN_CACNUOC;
+				type = NewsTypes.TYPE.CookingFrance.name();
+				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}
 			
 			articles = source.getAllElementsByClass("solr-content").get(0).getChildElements().get(0).getChildElements();

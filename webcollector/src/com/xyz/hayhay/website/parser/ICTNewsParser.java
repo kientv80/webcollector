@@ -20,22 +20,22 @@ public class ICTNewsParser  extends BaseParser{
 		List<News> congngheNews = new ArrayList<>();
 		String type = "";
 		if(url.indexOf("cntt")>0){
-			type = NewsTypes.CNTT;
+			type = NewsTypes.TYPE.IT.name();
 		}else if(url.indexOf("vien-thong")>0){
-			type=NewsTypes.VIENTHONG;
+			type=NewsTypes.TYPE.Telecom.name();
 		}else if(url.indexOf("internet")>0){
-			type = NewsTypes.INTERNET;
+			type = NewsTypes.TYPE.Internet.name();
 		}else if(url.indexOf("the-gioi-so")>0){
-			type = NewsTypes.TGS;
+			type = NewsTypes.TYPE.Telecom.name();
 		}else if(url.indexOf("khoi-nghiep")>0){
-			type = NewsTypes.KHOINGHIEP;
+			type = NewsTypes.TYPE.StatUp.name();
 		}else{//cong-nghe-360
-			type = NewsTypes.TYPE_CONGNGHE;
+			type = NewsTypes.TYPE.Tech.name();
 		}
-		if(NewsTypes.KHOINGHIEP.equals(type)){
-			collectICTNewsArticles(source, congngheNews,type,NewsTypes.KHOINGHIEP,fromWebsite);
+		if(NewsTypes.TYPE.StatUp.name().equals(type)){
+			collectICTNewsArticles(source, congngheNews,type,NewsTypes.CATEGORY.Business.name(),fromWebsite);
 		}else{
-			collectICTNewsArticles(source, congngheNews,type,NewsTypes.TYPE_CONGNGHE,fromWebsite);
+			collectICTNewsArticles(source, congngheNews,type,NewsTypes.CATEGORY.Tech.name(),fromWebsite);
 		}
 		return congngheNews;
 	}

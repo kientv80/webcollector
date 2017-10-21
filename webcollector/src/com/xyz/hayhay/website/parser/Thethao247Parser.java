@@ -23,7 +23,7 @@ public class Thethao247Parser extends BaseParser {
 		Image image = new Image("img", "width", "200", false);
 		image.setValueFromAtttributeName("src");
 		A a = new A();
-		String type = NewsTypes.TENNIS;
+		String type = NewsTypes.TYPE.Tennis.name();
 
 		List<News> sportNews = new ArrayList<>();
 		List<Element> newsItems = s.getAllElementsByClass("cat-row");
@@ -31,7 +31,7 @@ public class Thethao247Parser extends BaseParser {
 			for (Element item : newsItems) {
 				News n = new News();
 				n.setType(type);
-				n.setParentCateName(NewsTypes.TYPE_SPORTNEWS);
+				n.setParentCateName(NewsTypes.CATEGORY.Sport.name());
 				n.setFromWebSite(fromWebsite);
 				parseElementToNews(item, n, a, title, image, p);
 				if (n.getTitle() != null && n.getUrl() != null && n.getImageUrl() != null) {

@@ -24,13 +24,13 @@ public class ZingParser  extends BaseParser{
 		Image image = new Image();
 		image.setDomain("https:");
 		ShotDescription desc = new ShotDescription("p", "class", "summary", true);
-		String type = NewsTypes.XEMAY;
+		String type = NewsTypes.TYPE.Motor.name();
 		if (url.indexOf("o-to.html") > 0)
-			type = NewsTypes.OTO;
+			type = NewsTypes.TYPE.Car.name();
 		else if (url.indexOf("xe-do.html") > 0)
-			type = NewsTypes.XEDO;
+			type = NewsTypes.TYPE.AdjustCar.name();
 		else if (url.indexOf("sieu-xe.html") > 0)
-			type = NewsTypes.SIEUXE;
+			type = NewsTypes.TYPE.SupperCar.name();
 
 		Element e = s.getElementById("category").getChildElements().get(0).getChildElements().get(1);
 		List<Element> articles = e.getAllElements("article");
@@ -39,7 +39,7 @@ public class ZingParser  extends BaseParser{
 			News n = new News();
 			n.setFromWebSite("news.zing.vn");
 			n.setType(type);
-			n.setParentCateName(NewsTypes.XE);
+			n.setParentCateName(NewsTypes.CATEGORY.CarAndMotor.name());
 			parseElementToNews(article, n, a, t, image, desc);
 			if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
 					&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {

@@ -26,25 +26,25 @@ public class TuoiTreParser extends BaseParser {
 		image.setValueFromAtttributeName("src");
 		ShotDescription p = new ShotDescription("p", null, null, true);
 
-		String type = NewsTypes.CHINHTRIXAHOI;
-		String parentCate = NewsTypes.TYPE_TINTRONGNUOC;
+		String type = NewsTypes.TYPE.HotNews.name();
+		String parentCate = NewsTypes.CATEGORY.HotNews.name();
 		if (url.endsWith("thoi-su-suy-nghi"))
-			type = NewsTypes.THOISU;
+			type = NewsTypes.TYPE.HotNews.name();
 		else if (url.endsWith("phong-su-ky-su"))
-			type = NewsTypes.PHONGSU;
+			type = NewsTypes.TYPE.HotNews.name();
 		else if (url.endsWith("/chuyen-thuong-ngay"))
-			type = NewsTypes.CHUYENTHUONGNGAY;
+			type = NewsTypes.TYPE.HotNews.name();
 		else if (url.endsWith("tieu-diem"))
-			type = NewsTypes.TIEUDIEM;
+			type = NewsTypes.TYPE.HotNews.name();
 		else if (url.endsWith("/phap-luat"))
-			type = NewsTypes.PHAPLUAT;
+			type = NewsTypes.TYPE.HotNews.name();
 		else if (url.endsWith("/nhip-song-tre"))
-			type = NewsTypes.NHIPSONGTRE;
+			type = NewsTypes.TYPE.HotNews.name();
 		else if (url.endsWith("/moi-truong"))
-			type = NewsTypes.MOITRUONG;
+			type = NewsTypes.TYPE.HotNews.name();
 		else if (url.endsWith("/kinh-te")){
-			type = NewsTypes.TYPE_KINHTE;
-			parentCate = NewsTypes.TYPE_ECONOMY;
+			type = NewsTypes.TYPE.Economic.name();
+			parentCate = NewsTypes.CATEGORY.Economic.name();
 		}
 		if(type == null || type.isEmpty())
 			return null;

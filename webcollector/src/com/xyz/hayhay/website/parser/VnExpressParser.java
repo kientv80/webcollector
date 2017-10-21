@@ -24,32 +24,32 @@ public class VnExpressParser extends BaseParser {
 		String type = "";
 		String parentType = "";
 		if (url.indexOf("thoi-su") > 0) {
-			type = NewsTypes.TYPE_TINTRONGNUOC;
-			parentType = NewsTypes.TYPE_TINTRONGNUOC;
+			type = NewsTypes.TYPE.HotNews.name();
+			parentType = NewsTypes.CATEGORY.HotNews.name();
 		} else if (url.indexOf("bat-dong-san") > 0) {
-			type = NewsTypes.BATDONGSAN;
-			parentType = NewsTypes.XAYDUNG;
+			type = NewsTypes.TYPE.Realty.name();
+			parentType = NewsTypes.CATEGORY.Realty.name();
 		}else if (url.indexOf("o-to.html") > 0){
-			type = NewsTypes.OTO;
-			parentType = NewsTypes.XE;
+			type = NewsTypes.TYPE.Car.name();
+			parentType = NewsTypes.CATEGORY.CarAndMotor.name();
 		}else if (url.indexOf("xe-do.html") > 0){
-			type = NewsTypes.XEDO;
-			parentType = NewsTypes.XE;
+			type = NewsTypes.TYPE.AdjustCar.name();
+			parentType = NewsTypes.CATEGORY.CarAndMotor.name();
 		}else if (url.indexOf("sieu-xe.html") > 0){
-			type = NewsTypes.SIEUXE;
-			parentType = NewsTypes.XE;
+			type = NewsTypes.TYPE.SupperCar.name();
+			parentType = NewsTypes.CATEGORY.CarAndMotor.name();
 		}else if (url.indexOf("tin-tuc/cuoi") > 0){
-			type = NewsTypes.FUNYSTORY;
-			parentType = NewsTypes.FUNYSTORY;
+			type = NewsTypes.TYPE.Funny.name();
+			parentType = NewsTypes.CATEGORY.Funny.name();
 		}else if (url.indexOf("tin-tuc/khoi-nghiep") > 0){
-			type = NewsTypes.KHOINGHIEP;
-			parentType = NewsTypes.KHOINGHIEP;
+			type = NewsTypes.TYPE.StatUp.name();
+			parentType = NewsTypes.CATEGORY.Business.name();
 		} else if (url.indexOf("/tin-tuc/the-gioi") > 0){
-			type = NewsTypes.TYPE_TINQUOCTE;
-			parentType = NewsTypes.TYPE_TINQUOCTE;
+			type = NewsTypes.TYPE.HotNews.name();
+			parentType = NewsTypes.CATEGORY.HotNews.name();
 		}else if(url.contains("oto-xe-may")){
-			type = NewsTypes.XE;
-			parentType = NewsTypes.XE;
+			type = NewsTypes.TYPE.Car.name();
+			parentType = NewsTypes.CATEGORY.CarAndMotor.name();
 		}
 		if(type.isEmpty())
 			return null;

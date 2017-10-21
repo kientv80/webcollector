@@ -17,15 +17,15 @@ public class BaoXanDungParser extends BaseParser{
 
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
-		String type = NewsTypes.NHADEP;
+		String type = NewsTypes.TYPE.BeautifulHouse.name();
 		if (url.endsWith("/quy-hoach"))
-			type = NewsTypes.QUYHOACH;
+			type = NewsTypes.TYPE.Zoing.name();
 		else if (url.endsWith("/vat-lieu"))
-			type = NewsTypes.VATLIEU;
+			type = NewsTypes.TYPE.Material.name();
 		else if (url.endsWith("/kien-truc"))
-			type = NewsTypes.KIENTRUC;
+			type = NewsTypes.TYPE.Architecture.name();
 		else if (url.endsWith("/bat-dong-san"))
-			type = NewsTypes.BATDONGSAN;
+			type = NewsTypes.TYPE.Realty.name();
 		List<Element> articles = source.getElementById("main_content").getAllElements("li");
 		A a = new A();
 		Title t = new Title("a", null, null, false);
@@ -37,7 +37,7 @@ public class BaoXanDungParser extends BaseParser{
 			News n = new News();
 			n.setFromWebSite(fromWebsite);
 			n.setType(type);
-			n.setParentCateName(NewsTypes.XAYDUNG);
+			n.setParentCateName(NewsTypes.CATEGORY.Realty.name());
 			parseElementToNews(e, n, a, t, i, desc);
 			if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
 					&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {

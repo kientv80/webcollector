@@ -30,21 +30,21 @@ public class VnEconomyParser extends BaseParser {
 		List<News> vneconomy = new ArrayList<>();
 		String type = "";
 		if (url.contains("tai-chinh.htm")) {
-			type = NewsTypes.TAICHINH;
+			type = NewsTypes.TYPE.Finance.name();
 		} else if (url.contains("ngan-hang.htm")) {
-			type = NewsTypes.NGANHANG;
+			type = NewsTypes.TYPE.Banking.name();
 		} else if (url.contains("thue-ngan-sach.htm")) {
-			type = NewsTypes.NGANSACH;
+			type = NewsTypes.TYPE.Budget.name();
 		} else if (url.contains("lai-suat.htm")) {
-			type = NewsTypes.LAISUAT;
+			type = NewsTypes.TYPE.Banking.name();
 		} else if (url.contains("thi-truong-vang.htm")) {
-			type = NewsTypes.THITRUONGVANG;
+			type = NewsTypes.TYPE.Gold.name();
 		} else if (url.contains("ty-gia.htm?")) {
-			type = NewsTypes.TYGIA;
+			type = NewsTypes.TYPE.Banking.name();
 		} else if (url.contains("chung-khoan.htm")) {
-			type = NewsTypes.CHUNGKHOAN;
+			type = NewsTypes.TYPE.Stock.name();
 		} else if (url.contains("bat-dong-san.htm")) {
-			type = NewsTypes.DIA_OC;
+			type = NewsTypes.TYPE.Realty.name();
 		}
 		collectArticles(s, vneconomy, a, t, image, p, type, fromWebsite);
 		// special case, change image for mobile to image for pc
@@ -69,10 +69,10 @@ public class VnEconomyParser extends BaseParser {
 				mn.setFromWebSite(fromWeb);
 				mn.setType(type);
 				mn.setNewsOrder(News.NEWS_ORDER.HI.name());
-				if (NewsTypes.DIA_OC.equals(type)) {
-					mn.setParentCateName(NewsTypes.XAYDUNG);
+				if (NewsTypes.TYPE.Realty.name().equals(type)) {
+					mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
 				} else {
-					mn.setParentCateName(NewsTypes.TYPE_ECONOMY);
+					mn.setParentCateName(NewsTypes.CATEGORY.Economic.name());
 				}
 				parseElementToNews(midNews, mn, a, t, image, p);
 				if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
@@ -90,10 +90,10 @@ public class VnEconomyParser extends BaseParser {
 				mn.setFromWebSite(fromWeb);
 				mn.setType(type);
 				mn.setNewsOrder(News.NEWS_ORDER.HI.name());
-				if (NewsTypes.DIA_OC.equals(type)) {
-					mn.setParentCateName(NewsTypes.DIA_OC);
+				if (NewsTypes.TYPE.Realty.name().equals(type)) {
+					mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
 				} else {
-					mn.setParentCateName(NewsTypes.TYPE_ECONOMY);
+					mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
 				}
 				parseElementToNews(midNews, mn, a, t, image, null);
 				if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
@@ -111,10 +111,10 @@ public class VnEconomyParser extends BaseParser {
 			mn.setFromWebSite(fromWeb);
 			mn.setType(type);
 			mn.setNewsOrder(News.NEWS_ORDER.M.name());
-			if (NewsTypes.DIA_OC.equals(type)) {
-				mn.setParentCateName(NewsTypes.DIA_OC);
+			if (NewsTypes.TYPE.Realty.name().equals(type)) {
+				mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
 			} else {
-				mn.setParentCateName(NewsTypes.TYPE_ECONOMY);
+				mn.setParentCateName(NewsTypes.CATEGORY.Economic.name());
 			}
 			parseElementToNews(midNews, mn, a, t, image, p);
 			if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
@@ -133,10 +133,10 @@ public class VnEconomyParser extends BaseParser {
 				mn.setFromWebSite(fromWeb);
 				mn.setType(type);
 				mn.setNewsOrder(News.NEWS_ORDER.M.name());
-				if (NewsTypes.DIA_OC.equals(type)) {
-					mn.setParentCateName(NewsTypes.DIA_OC);
+				if (NewsTypes.TYPE.Realty.name().equals(type)) {
+					mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
 				} else {
-					mn.setParentCateName(NewsTypes.TYPE_ECONOMY);
+					mn.setParentCateName(NewsTypes.CATEGORY.Economic.name());
 				}
 				parseElementToNews(midNews, mn, a, t, image, null);
 				if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()

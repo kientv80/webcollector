@@ -27,15 +27,15 @@ public class NgoiSaoNetParser extends BaseParser{
 		List<News> ngoisaoNet = new ArrayList<>();
 		String type = "";
 		if (url.indexOf("showbiz-viet") > 0) {
-			type = NewsTypes.SHOWBIZVIET;
+			type = NewsTypes.TYPE.FamousPerson.name();
 		} else if (url.indexOf("chau-a") > 0) {
-			type = NewsTypes.CHAUA;
+			type = NewsTypes.TYPE.FamousPerson.name();
 		} else if (url.indexOf("hollywood") > 0) {
-			type = NewsTypes.HOLLYWOOD;
+			type = NewsTypes.TYPE.FamousPerson.name();
 		} else if (url.indexOf("phong-cach") > 0) {
-			type = NewsTypes.PHONGCACH;
+			type = NewsTypes.TYPE.Style.name();
 		} else {
-			type = NewsTypes.BENLE;
+			type = NewsTypes.TYPE.BehindTheScenes.name();
 		}
 		Element homeNews = s.getElementById("news_home");
 		List<Element> news = s.getElementById("box_tintop_new").getAllElements("li");
@@ -46,7 +46,7 @@ public class NgoiSaoNetParser extends BaseParser{
 			n.setFromWebSite(fromWeb);
 			n.setHotNews(true);
 			n.setType(type);
-			n.setParentCateName(NewsTypes.NGOISAO);
+			n.setParentCateName(NewsTypes.CATEGORY.Entertainment.name());
 			parseElementToNews(e, n, a, t, image, p);
 			if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
 					&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {
