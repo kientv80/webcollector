@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 public class NewsTypes {
-	public static enum CATEGORY {HotNews,Economic,Business,Tech,Realty,Sport,Health,CarAndMotor,Entertainment,Cooking,Love,Funny};
+	public static enum CATEGORY {HotNews,Economic,Business,Tech,Realty,Sport,Health,CarAndMotor,Entertainment,Cooking,Love,Funny,Politics,Science,Opinion };
 	public static enum TYPE{HotNews,
 		Economic,Finance,Budget,Banking,Gold,Stock,
 		Figure,Management,Job,Trademark,Experience,Company,Business,
@@ -17,17 +17,17 @@ public class NewsTypes {
 		Funny,
 		Health,HealthyFood,MedicineFood,
 		CookingPig,CookingHen,CookingShrimp,CookingEgg,CookingVegetable,CookingCow,CookingFish,CookingVegetarian,CookingItaly,CookingKorea,CookingJapan,CookingThai,CookingFrance,
-		Science,Politics,
+		Science,Politics,Opinion,
 		Car,Motor,AdjustCar,SupperCar,
 		Realty,Building,Zoing,Architecture,BeautifulHouse, Material,
 		StatUp,Love,Family,MomAndBaby,Soul,Gender}
 	public static Map<CATEGORY,List<TYPE>> cateTypeMapping = new HashMap<>();
 	static{
-		cateTypeMapping.put(CATEGORY.HotNews, Arrays.asList(new TYPE[]{TYPE.HotNews,TYPE.Politics}));
+		cateTypeMapping.put(CATEGORY.HotNews, Arrays.asList(new TYPE[]{TYPE.HotNews,TYPE.Politics,TYPE.Opinion}));
 		cateTypeMapping.put(CATEGORY.Economic, Arrays.asList(new TYPE[]{TYPE.Economic,TYPE.Finance,TYPE.Budget,TYPE.Banking,TYPE.Gold}));
 		cateTypeMapping.put(CATEGORY.Business, Arrays.asList(new TYPE[]{TYPE.Figure,TYPE.Management,TYPE.Job,TYPE.Trademark,TYPE.Experience,TYPE.Company, TYPE.StatUp}));
 		cateTypeMapping.put(CATEGORY.Sport, Arrays.asList(new TYPE[]{TYPE.Football,TYPE.Tennis,TYPE.Golf,TYPE.UFC}));
-		cateTypeMapping.put(CATEGORY.Tech, Arrays.asList(new TYPE[]{TYPE.IT,TYPE.Internet,TYPE.Telecom,TYPE.Tech, TYPE.Science}));
+		cateTypeMapping.put(CATEGORY.Tech, Arrays.asList(new TYPE[]{TYPE.IT,TYPE.Internet,TYPE.Telecom,TYPE.Tech}));
 		cateTypeMapping.put(CATEGORY.Entertainment, Arrays.asList(new TYPE[]{TYPE.FamousPerson,TYPE.Style,TYPE.Fashion,TYPE.BehindTheScenes}));
 		cateTypeMapping.put(CATEGORY.Funny, Arrays.asList(new TYPE[]{TYPE.Funny}));
 		cateTypeMapping.put(CATEGORY.Health, Arrays.asList(new TYPE[]{TYPE.Health,TYPE.HealthyFood,TYPE.MedicineFood}));
@@ -35,6 +35,12 @@ public class NewsTypes {
 		cateTypeMapping.put(CATEGORY.CarAndMotor, Arrays.asList(new TYPE[]{TYPE.Car,TYPE.Motor,TYPE.AdjustCar,TYPE.SupperCar}));
 		cateTypeMapping.put(CATEGORY.Realty, Arrays.asList(new TYPE[]{TYPE.Realty,TYPE.Building,TYPE.Zoing,TYPE.Architecture,TYPE.BeautifulHouse,TYPE.Material}));
 		cateTypeMapping.put(CATEGORY.Love, Arrays.asList(new TYPE[]{TYPE.Love,TYPE.MomAndBaby,TYPE.Soul,TYPE.Family,TYPE.Gender}));
+		
+		cateTypeMapping.put(CATEGORY.Science, Arrays.asList(new TYPE[]{TYPE.Science}));
+		cateTypeMapping.put(CATEGORY.Opinion, Arrays.asList(new TYPE[]{TYPE.Opinion}));
+		cateTypeMapping.put(CATEGORY.Politics, Arrays.asList(new TYPE[]{TYPE.Politics}));
+		
+	
 	}
 	
 	public static String DINHDUONG = "DINHDUONG";

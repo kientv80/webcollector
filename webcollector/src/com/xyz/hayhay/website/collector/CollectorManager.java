@@ -1,5 +1,8 @@
 package com.xyz.hayhay.website.collector;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -196,14 +199,34 @@ public class CollectorManager {
 	}
 
 	private Source getSource(String url) throws Exception {
-		Parser pa = new Parser(url);
-		NodeIterator no = pa.elements();
 		StringBuilder content = new StringBuilder();
-		while (no.hasMoreNodes()) {
-			content.append(no.nextNode().toHtml());
+		try {
+			Parser pa = new Parser(url);
+			NodeIterator no = pa.elements();
+
+			while (no.hasMoreNodes()) {
+				content.append(no.nextNode().toHtml());
+			}
+		} catch (Exception e) {
+			content = loadContentByCurl(url);
 		}
 		Source s = new Source(content);
 		return s;
+	}
+
+	private StringBuilder loadContentByCurl(String url) throws Exception {
+		Process process = Runtime.getRuntime().exec("curl "+url);
+
+		StringBuilder content = new StringBuilder();
+		BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+		String line = null;
+
+		while ((line = input.readLine()) != null) {
+			content.append(line).append("\n");
+		}
+		//System.out.println(content);
+		return content;
 	}
 
 	protected void storeNews(Website website) {

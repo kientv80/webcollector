@@ -63,7 +63,7 @@ public class FoxNewsParser extends BaseParser {
 					title = new Title("a", null, null, true);
 					title.setMinLength(50);
 					n.setType(NewsTypes.TYPE.Politics.name());
-					n.setParentCateName(NewsTypes.CATEGORY.HotNews.name());
+					n.setParentCateName(NewsTypes.CATEGORY.Politics.name());
 				}
 				parseElementToNews(article, n, a, title, i, p);
 				if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null

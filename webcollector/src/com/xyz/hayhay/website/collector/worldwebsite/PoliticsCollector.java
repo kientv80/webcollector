@@ -6,11 +6,13 @@ import com.xyz.hayhay.entirty.News;
 import com.xyz.hayhay.website.collector.ArticleCollector;
 import com.xyz.hayhay.website.parser.FoxNewsParser;
 import com.xyz.hayhay.website.parser.NYTimesParser;
+import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
+
 import net.htmlparser.jericho.Source;
 
 public class PoliticsCollector extends ArticleCollector {
 	String[] urls = new String[] { "http://www.foxnews.com/politics.html", "https://www.nytimes.com/pages/politics/index.html"
-			};
+			,"http://www.scmp.com/news/china/policies-politics"};
 
 	public PoliticsCollector(long repeatTime) {
 		super(repeatTime);
@@ -23,6 +25,8 @@ public class PoliticsCollector extends ArticleCollector {
 			return new FoxNewsParser().collectArticle(source, url, fromWebsite);
 		}else if ("nytimes.com".equals(fromWebsite)) {
 			return new NYTimesParser().collectArticle(source, url, fromWebsite);
+		}else if ("scmp.com".equals(fromWebsite)) {
+			return new SouthChinaMorningPostParser().collectArticle(source, url, fromWebsite);
 		}
 		return null;
 	}

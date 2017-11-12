@@ -13,49 +13,45 @@ import com.xyz.hayhay.entirty.webcollection.Title;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Source;
 
-public class NYTimesParser extends BaseParser {
+public class ChinaDailyParser extends BaseParser {
 
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		List<News> news = new ArrayList<>();
-		List<Element> articles = source.getElementById("main").getAllElementsByClass("story");
+		List<Element> articles = source.getElementById("D1pic1").getAllElementsByClass("fcon");
+		articles.addAll(source.getAllElementsByClass("mb10 tw3_01"));
+		articles.addAll(source.getAllElementsByClass("tw2_l"));
+		articles.addAll(source.getAllElementsByClass("tw4"));
+		articles.addAll(source.getAllElementsByClass("tw6"));
+		
 		A a = new A();
+		a.setDomain("http://www.chinadaily.com.cn/china/");
 		Title title = new Title("a", null, null, true);
 		Image i = new Image();
+		i.setDomain("http://www.chinadaily.com.cn/china/");
 		ShotDescription p = new ShotDescription("p", "class", "summary", true);
-		if(url.endsWith("?src=busfn")){
-			articles = source.getElementById("main").getAllElements("article");
-			title = new Title("h2", "class", "headline", true);
-		}
 		if (articles != null && !articles.isEmpty()) {
-
 			for (Element article : articles) {
-				News n = new News(News.COUNTRY.US.name());
+				News n = new News(News.COUNTRY.CHINA.name());
 				n.setFromWebSite(fromWebsite);
-				if (url.contains("business")) {
+				if(url.contains("business")){
 					n.setType(NewsTypes.TYPE.Business.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Business.name());
-				} else if (url.endsWith("science")) {
-					n.setType(NewsTypes.TYPE.Science.name());
-					n.setParentCateName(NewsTypes.CATEGORY.Tech.name());
-				}else if (url.endsWith("health")) {
-					n.setType(NewsTypes.TYPE.Health.name());
-					n.setParentCateName(NewsTypes.CATEGORY.Health.name());
-				}else if (url.endsWith("politics/index.html")) {
-					n.setType(NewsTypes.TYPE.Politics.name());
-					n.setParentCateName(NewsTypes.CATEGORY.Politics.name());
-				}else if (url.contains("technology")) {
-					n.setType(NewsTypes.TYPE.Tech.name());
-					n.setParentCateName(NewsTypes.CATEGORY.Tech.name());
+				}else{
+					n.setType(NewsTypes.TYPE.HotNews.name());
+					n.setParentCateName(NewsTypes.CATEGORY.HotNews.name());
 				}
 				parseElementToNews(article, n, a, title, i, p);
+				
 				if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
-						&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty() && !news.contains(n)) {
+						&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
+						&& !news.contains(n)) {
 					news.add(n);
 				}
 			}
 
 		}
+		
 		return news;
 	}
 

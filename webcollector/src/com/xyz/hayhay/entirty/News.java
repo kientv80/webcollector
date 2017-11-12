@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 public class News {
-	public static enum COUNTRY{VN,US}
+	public static enum COUNTRY{VN,US,CHINA}
 	public static enum NEWS_ORDER {H,HI,M};//hotnews,highlight news, mid news
 	
 	public News(){
