@@ -26,6 +26,7 @@ import com.xyz.hayhay.website.collector.XeCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.BusinessNewsCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.HealthCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.HotNewsCollector;
+import com.xyz.hayhay.website.collector.worldwebsite.OpinionsCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.PoliticsCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.ScienceNewsCollector;
 import com.xyz.hayhay.website.collector.worldwebsite.TechNewsCollector;
@@ -69,6 +70,8 @@ public class WebCollector {
 		cMng.register(new ScienceNewsCollector(ONE_HOUR));
 		cMng.register(new HealthCollector(ONE_HOUR));
 		cMng.register(new PoliticsCollector(ONE_HOUR));
+		cMng.register(new OpinionsCollector(ONE_HOUR));
+		
 		cMng.register(new HotNewsCollector(ONE_HOUR));
 		
 		cMng.startCollectorManager();

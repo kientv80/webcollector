@@ -7,12 +7,13 @@ import com.xyz.hayhay.website.collector.ArticleCollector;
 import com.xyz.hayhay.website.parser.FoxNewsParser;
 import com.xyz.hayhay.website.parser.NYTimesParser;
 import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
+import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 
 import net.htmlparser.jericho.Source;
 
 public class PoliticsCollector extends ArticleCollector {
 	String[] urls = new String[] { "http://www.foxnews.com/politics.html", "https://www.nytimes.com/pages/politics/index.html"
-			,"http://www.scmp.com/news/china/policies-politics"};
+			,"http://www.scmp.com/news/china/policies-politics","https://www.washingtonpost.com/politics"};
 
 	public PoliticsCollector(long repeatTime) {
 		super(repeatTime);
@@ -27,6 +28,8 @@ public class PoliticsCollector extends ArticleCollector {
 			return new NYTimesParser().collectArticle(source, url, fromWebsite);
 		}else if ("scmp.com".equals(fromWebsite)) {
 			return new SouthChinaMorningPostParser().collectArticle(source, url, fromWebsite);
+		}else if ("washingtonpost.com".equals(fromWebsite)) {
+			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
 		}
 		return null;
 	}

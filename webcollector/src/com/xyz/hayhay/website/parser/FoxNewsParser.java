@@ -53,7 +53,7 @@ public class FoxNewsParser extends BaseParser {
 					title = new Title("a", null, null, true);
 					title.setMinLength(50);
 					n.setType(NewsTypes.TYPE.Science.name());
-					n.setParentCateName(NewsTypes.CATEGORY.Tech.name());
+					n.setParentCateName(NewsTypes.CATEGORY.Science.name());
 				} else if (url.endsWith("health.html")) {
 					title = new Title("a", null, null, true);
 					title.setMinLength(50);

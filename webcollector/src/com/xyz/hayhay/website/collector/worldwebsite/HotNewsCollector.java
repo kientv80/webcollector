@@ -8,11 +8,12 @@ import com.xyz.hayhay.website.parser.ChinaDailyParser;
 import com.xyz.hayhay.website.parser.FoxNewsParser;
 import com.xyz.hayhay.website.parser.NYTimesParser;
 import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
+import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 
 import net.htmlparser.jericho.Source;
 
 public class HotNewsCollector extends ArticleCollector {
-	String[] urls = new String[] { "http://www.chinadaily.com.cn/china/", "http://www.scmp.com/news/china/society" };
+	String[] urls = new String[] { "http://www.chinadaily.com.cn/china/", "http://www.scmp.com/news/china/society","https://www.washingtonpost.com/" };
 
 	public HotNewsCollector(long repeatTime) {
 		super(repeatTime);
@@ -24,7 +25,10 @@ public class HotNewsCollector extends ArticleCollector {
 			return new ChinaDailyParser().collectArticle(source, url, fromWebsite);
 		} else if ("scmp.com".equals(fromWebsite)) {
 			return new SouthChinaMorningPostParser().collectArticle(source, url, fromWebsite);
+		} else if ("washingtonpost.com".equals(fromWebsite)) {
+			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
 		}
+		
 		return null;
 	}
 

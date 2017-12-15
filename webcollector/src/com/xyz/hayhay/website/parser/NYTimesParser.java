@@ -37,7 +37,7 @@ public class NYTimesParser extends BaseParser {
 					n.setParentCateName(NewsTypes.CATEGORY.Business.name());
 				} else if (url.endsWith("science")) {
 					n.setType(NewsTypes.TYPE.Science.name());
-					n.setParentCateName(NewsTypes.CATEGORY.Tech.name());
+					n.setParentCateName(NewsTypes.CATEGORY.Science.name());
 				}else if (url.endsWith("health")) {
 					n.setType(NewsTypes.TYPE.Health.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Health.name());

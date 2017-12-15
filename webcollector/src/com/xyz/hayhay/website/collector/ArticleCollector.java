@@ -15,6 +15,15 @@ import net.htmlparser.jericho.Source;
 public abstract class ArticleCollector {
 	private long repeatTime;
 	private long lastTimeProcessed;
+	private boolean isCollecting;
+	public boolean isCollecting() {
+		return isCollecting;
+	}
+
+	public void setCollecting(boolean isCollecting) {
+		this.isCollecting = isCollecting;
+	}
+
 	public ArticleCollector(long repeatTime) {
 		this.setRepeatTime(repeatTime);
 	}
