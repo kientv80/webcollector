@@ -62,7 +62,7 @@ public class WebCollector {
 		cMng.register(new TaiChinhNewsCollector(FIFTEEN_MINUTES));
 		cMng.register(new TinhYeuCollector(FOUR_HOURS));
 		cMng.register(new TinTheGioiCollector(FIFTEEN_MINUTES));
-		cMng.register(new TinTrongNuocArticleCollector(FIFTEEN_MINUTES));
+		
 		cMng.register(new XeCollector(FOUR_HOURS));
 		cMng.register(new KinhDoanhCollector(ONE_HOUR));
 		cMng.register(new BusinessNewsCollector(ONE_HOUR));
@@ -73,6 +73,7 @@ public class WebCollector {
 		cMng.register(new OpinionsCollector(ONE_HOUR));
 		
 		cMng.register(new HotNewsCollector(ONE_HOUR));
+		cMng.register(new TinTrongNuocArticleCollector(FIFTEEN_MINUTES));
 		
 		cMng.startCollectorManager();
 		PingServer.startPingServer();

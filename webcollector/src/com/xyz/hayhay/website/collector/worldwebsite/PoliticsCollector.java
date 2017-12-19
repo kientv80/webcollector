@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.xyz.hayhay.entirty.News;
 import com.xyz.hayhay.website.collector.ArticleCollector;
+import com.xyz.hayhay.website.parser.AsiaNikkeiParser;
 import com.xyz.hayhay.website.parser.FoxNewsParser;
 import com.xyz.hayhay.website.parser.NYTimesParser;
 import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
@@ -12,7 +13,7 @@ import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 import net.htmlparser.jericho.Source;
 
 public class PoliticsCollector extends ArticleCollector {
-	String[] urls = new String[] { "http://www.foxnews.com/politics.html", "https://www.nytimes.com/pages/politics/index.html"
+	String[] urls = new String[] { "https://asia.nikkei.com/Politics-Economy/Policy-Politics","http://www.foxnews.com/politics.html", "https://www.nytimes.com/pages/politics/index.html"
 			,"http://www.scmp.com/news/china/policies-politics","https://www.washingtonpost.com/politics"};
 
 	public PoliticsCollector(long repeatTime) {
@@ -31,6 +32,9 @@ public class PoliticsCollector extends ArticleCollector {
 		}else if ("washingtonpost.com".equals(fromWebsite)) {
 			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
 		}
+//		else if ("asia.nikkei.com".equals(fromWebsite)) {
+//			return new AsiaNikkeiParser().collectArticle(source, url, fromWebsite);
+//		}
 		return null;
 	}
 

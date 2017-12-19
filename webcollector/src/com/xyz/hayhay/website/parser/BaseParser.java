@@ -1,5 +1,6 @@
 package com.xyz.hayhay.website.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.htmlparser.Parser;
@@ -84,19 +85,34 @@ public abstract class BaseParser {
 
 	public String getValue(Element e, HTMLElement html) {
 		if (isMach(e, html)) {
-			String value = "";
+			List<String> values = new ArrayList<>();
 			if (html.isGetText()) {
-				value = e.getTextExtractor().toString();
+				values.add(e.getTextExtractor().toString());
 			} else {
-				value = e.getAttributeValue(html.getValueFromAtttributeName());
-			}
-			if (html.getExcludedTexts() != null) {
-				for (String text : html.getExcludedTexts().split(",")) {
-					if (text.equals(value))
-						return null;
+				for (String attr : html.getValueFromAtttributeName().split(",")) {
+					values.add(e.getAttributeValue(attr));
 				}
+
 			}
-			if (html.getMinLength() != 0 && value.length() < html.getMinLength())
+			String value = null;
+			if (html.getExcludedTexts() != null) {
+				for (String vl : values) {
+					boolean ok = true;
+					for (String text : html.getExcludedTexts().split(",")) {
+						if (vl != null && vl.contains(text)) {
+							ok = false;
+						}
+					}
+					if(ok && vl != null){
+						value = vl;
+						break;
+					}
+				}
+			} else if (values.size() > 0) {
+				value = values.get(0);
+			}
+
+			if (html.getMinLength() != 0 && value != null && value.length() < html.getMinLength())
 				return null;
 
 			return value;

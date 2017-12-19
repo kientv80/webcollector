@@ -24,14 +24,11 @@ public class SouthChinaMorningPostParser extends BaseParser {
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 
 		List<News> news = new ArrayList<>();
-		List<Element> articles = source.getAllElementsByClass("col-xs-8 col-2").get(0).getAllElements("article");
-		if (url.contains("tech")) {
-			articles = source.getAllElements("article");
-		} else if (url.contains("business")) {
-			articles = source.getAllElements("article");
-		}
+		List<Element> articles = source.getAllElements("article");
+
 		A a = new A();
 		a.setDomain("http://www.scmp.com/");
+		a.setExcludedTexts("article-type,author,columns");
 		Title title = new Title("a", null, null, false);
 		title.setValueFromAtttributeName("title");
 		Image i = new Image();

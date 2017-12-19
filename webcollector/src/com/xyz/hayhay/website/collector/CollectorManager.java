@@ -10,8 +10,10 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -73,16 +75,18 @@ public class CollectorManager {
 		setProcessing(true);
 
 		try {
-
+			List<News> allNews = new ArrayList<>();
+			Map<Integer, Set<String>> allTiles = loadAllNewsTitles();
 			for (ArticleCollector websiteCollector : collector) {
-				if (!websiteCollector.isCollecting()
-						&& (System.currentTimeMillis() - websiteCollector.getLastTimeProcessed()) > websiteCollector
-								.getRepeatTime()) {
-					try {
-						websiteCollector.setCollecting(true);
-						String website = null;
-						List<News> allNews = new ArrayList<>();
-						List<Website> webs = new ArrayList<>();
+				// if (!websiteCollector.isCollecting()
+				// && (System.currentTimeMillis() -
+				// websiteCollector.getLastTimeProcessed()) > websiteCollector
+				// .getRepeatTime()) {
+				try {
+					websiteCollector.setCollecting(true);
+					String website = null;
+
+					try (Connection con = JDBCConnection.getInstance().getConnection()) {
 						for (String url : websiteCollector.collectedUrls()) {
 							try {
 								website = getfromWeb(url);
@@ -96,9 +100,23 @@ public class CollectorManager {
 								w.setOverwrite(websiteCollector.overwrite());
 								w.setName(website);
 								w.setNews(articles);
-								webs.add(w);
-								w.getNews().removeAll(allNews);
-								allNews.addAll(w.getNews());
+
+								if (w.getNews() != null) {
+									w.getNews().removeAll(allNews);
+									allNews.addAll(w.getNews());
+									List<News> removedNews = new ArrayList<>();
+									for (News n : w.getNews()) {
+										int partition = Math.abs(n.getTitle().hashCode() % 10);
+										Set<String> titles = allTiles.get(partition);
+										if (titles != null && titles.contains(n.getTitle())) {
+											removedNews.add(n);
+										}
+									}
+									w.getNews().removeAll(removedNews);
+									storeNews(w, con);
+									w.getNews().clear();
+									w = null;
+								}
 
 							} catch (Exception e) {
 								log.error("URL=" + url, e);
@@ -107,35 +125,31 @@ public class CollectorManager {
 								e.printStackTrace();
 							}
 						}
-						for (Website w : webs) {
-							try {
-								storeNews(w);
-								if (w.getNews() != null)
-									w.getNews().clear();
-								w = null;
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					} finally {
-						websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
-						websiteCollector.setCollecting(false);
 					}
 
+				} finally {
+					websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
+					websiteCollector.setCollecting(false);
 				}
+
 			}
+			// }
 			// Remove duplicated and old news
 			try (Connection conn = JDBCConnection.getInstance().getConnection()) {
 				try (Statement stm = conn.createStatement()) {
-					stm.execute("DELETE n1 FROM news n1, news n2 WHERE n1.id > n2.id AND n1.title = n2.title");
+					// stm.execute("DELETE n1 FROM news n1, news n2 WHERE n1.id
+					// > n2.id AND n1.title = n2.title");
 					stm.execute("delete from news where collectedtime < "
-							+ (System.currentTimeMillis() - 12 * 30 * 24 * 60 * 60 * 1000));// 12
+							+ (System.currentTimeMillis() - 3 * 30 * 24 * 60 * 60 * 1000));// 12
 																							// months
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		} catch (
 
+		Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			setProcessing(false);
 		}
@@ -192,107 +206,109 @@ public class CollectorManager {
 		return content;
 	}
 
-	protected void storeNews(Website website) throws SQLException {
+	protected void storeNews(Website website, Connection con) throws SQLException {
 
 		if (website.getNews() != null && website.getNews().size() > 0) {
 			removeDuplicatedNews(website);
-			try (Connection con = JDBCConnection.getInstance().getConnection()) {
-				if (website.getNews().size() == 0)
-					return;
-				try {
-					List<News> newNews = new ArrayList<News>();
-					try (PreparedStatement stm2 = con
-							.prepareStatement("select id,url,title,fromwebsite from news where fromwebsite=?")) {
-						if (!website.isOverwrite()) {
-							stm2.setString(1, website.getNews().get(0).getFromWebSite());
-							List<News> oldNews = new ArrayList<>();
-							try (ResultSet rs = stm2.executeQuery()) {
-								while (rs.next()) {
-									News on = new News();
-									on.setId(rs.getInt("id"));
-									on.setUrl(rs.getString("url"));
-									on.setTitle(rs.getString("title"));
-									on.setFromWebSite(rs.getString("fromwebsite"));
-									if (!oldNews.contains(on))
-										oldNews.add(on);
-								}
-							}
 
-							if (oldNews.size() > 0) {
-								List<News> updateList = new ArrayList<News>();
-								for (News n : website.getNews()) {
-									if (oldNews.contains(n)) {
-										News ons = oldNews.get(oldNews.indexOf(n));
-										if (!ons.getTitle().equals(n.getTitle())) {// similar
-											ons.setUrl(n.getUrl());
-											ons.setImageUrl(n.getImageUrl());
-											ons.setTitle(n.getTitle());
-											ons.setShotDesc(n.getShotDesc());
-											updateList.add(ons);
-										}
-									} else {
-										newNews.add(n);
-									}
-								}
-
-								if (updateList.size() > 0) {
-									try (PreparedStatement st = con.prepareStatement(
-											"update news set title=?,shotdesc=?,url=?, imageurl=? where id=?")) {
-										for (News on : updateList) {
-											st.setString(1, on.getTitle());
-											st.setString(2, on.getShotDesc());
-											st.setString(3, on.getUrl());
-											st.setString(4, on.getImageUrl());
-											st.setInt(5, on.getId());
-											st.addBatch();
-										}
-										st.executeBatch();
-									}
-								}
-							} else {
-								newNews = website.getNews();
-							}
-						}
-
-						if (newNews.size() > 0) {
-							try (PreparedStatement stm = con.prepareStatement(
-									"insert into news(title,shotdesc,url,fromwebsite,imageurl,type,ishotnews,newsorder,collectedtime,title_id,parent_catename,country)values(?,?,?,?,?,?,?,?,?,?,?,?)")) {
-								for (News n : newNews) {
-									stm.clearParameters();
-									stm.setString(1, n.getTitle());
-									stm.setString(2, n.getShotDesc());
-									stm.setString(3, n.getUrl());
-									stm.setString(4, n.getFromWebSite());
-									stm.setString(5, n.getImageUrl());
-									stm.setString(6, n.getType());
-									stm.setBoolean(7, n.isHotNews());
-									stm.setString(8, n.getNewsOrder());
-									stm.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
-									stm.setString(10, n.getUniqueName());
-									stm.setString(11, n.getParentCateName());
-									stm.setString(12, n.getCountry());
-									stm.addBatch();
-								}
+			if (website.getNews().size() == 0)
+				return;
+			try {
+				/*
+				 * List<News> newNews = new ArrayList<News>(); try
+				 * (PreparedStatement stm2 = con
+				 * .prepareStatement("select id,url,title,fromwebsite from news where fromwebsite=?"
+				 * )) { if (!website.isOverwrite()) { stm2.setString(1,
+				 * website.getNews().get(0).getFromWebSite()); List<News>
+				 * oldNews = new ArrayList<>(); try (ResultSet rs =
+				 * stm2.executeQuery()) { while (rs.next()) { News on = new
+				 * News(); on.setId(rs.getInt("id"));
+				 * on.setUrl(rs.getString("url"));
+				 * on.setTitle(rs.getString("title"));
+				 * on.setFromWebSite(rs.getString("fromwebsite")); if
+				 * (!oldNews.contains(on)) oldNews.add(on); } }
+				 * 
+				 * if (oldNews.size() > 0) { List<News> updateList = new
+				 * ArrayList<News>(); for (News n : website.getNews()) { if
+				 * (oldNews.contains(n)) { News ons =
+				 * oldNews.get(oldNews.indexOf(n)); if
+				 * (!ons.getTitle().equals(n.getTitle())) {// similar
+				 * ons.setUrl(n.getUrl()); ons.setImageUrl(n.getImageUrl());
+				 * ons.setTitle(n.getTitle()); ons.setShotDesc(n.getShotDesc());
+				 * updateList.add(ons); } } else { newNews.add(n); } }
+				 * 
+				 * if (updateList.size() > 0) { try (PreparedStatement st =
+				 * con.prepareStatement(
+				 * "update news set title=?,shotdesc=?,url=?, imageurl=? where id=?"
+				 * )) { for (News on : updateList) { st.setString(1,
+				 * on.getTitle()); st.setString(2, on.getShotDesc());
+				 * st.setString(3, on.getUrl()); st.setString(4,
+				 * on.getImageUrl()); st.setInt(5, on.getId()); st.addBatch(); }
+				 * st.executeBatch(); } } } else { newNews = website.getNews();
+				 * } }
+				 */
+				if (website.getNews() != null && website.getNews().size() > 0) {
+					try (PreparedStatement stm = con.prepareStatement(
+							"insert into news(title,shotdesc,url,fromwebsite,imageurl,type,ishotnews,newsorder,collectedtime,title_id,parent_catename,country)values(?,?,?,?,?,?,?,?,?,?,?,?)")) {
+						int count = 0;
+						for (News n : website.getNews()) {
+							stm.clearParameters();
+							stm.setString(1, n.getTitle());
+							stm.setString(2, n.getShotDesc());
+							stm.setString(3, n.getUrl());
+							stm.setString(4, n.getFromWebSite());
+							stm.setString(5, n.getImageUrl());
+							stm.setString(6, n.getType());
+							stm.setBoolean(7, n.isHotNews());
+							stm.setString(8, n.getNewsOrder());
+							stm.setTimestamp(9, new Timestamp(System.currentTimeMillis()));
+							stm.setString(10, n.getUniqueName());
+							stm.setString(11, n.getParentCateName());
+							stm.setString(12, n.getCountry());
+							stm.addBatch();
+							count++;
+							if (count >= 10) {
 								stm.executeBatch();
+								stm.clearBatch();
+								count = 0;
 							}
 
 						}
+						if (count != 0) {
+							stm.executeBatch();
+						}
 					}
-				} catch (Exception e) {
-					log.error("", e);
-					e.printStackTrace();
-				} finally {
-					try {
-						con.close();
-					} catch (SQLException e) {
-						log.error("", e);
-					}
+
 				}
+				// }
+			} catch (Exception e) {
+				log.error("", e);
+				e.printStackTrace();
 			}
 
 		} else {
 			log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + website.getName() + " collect " + "0 news ");
 		}
+	}
+
+	private Map<Integer, Set<String>> loadAllNewsTitles() throws SQLException {
+		Map<Integer, Set<String>> titles = new HashMap<>();
+		try (Connection con = JDBCConnection.getInstance().getConnection()) {
+			try (PreparedStatement stm2 = con.prepareStatement("select title from news")) {
+				try (ResultSet rs = stm2.executeQuery()) {
+					while (rs.next()) {
+						String title = rs.getString("title");
+						Integer partition = Math.abs(title.hashCode() % 10);
+						if (!titles.containsKey(partition)) {
+							titles.put(partition, new HashSet<String>());
+						}
+						titles.get(partition).add(title);
+					}
+				}
+			}
+		}
+
+		return titles;
 	}
 
 	private void removeDuplicatedNews(Website website) {

@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 
 public class News {
 	public static enum COUNTRY {
-		VN, US, CHINA
+		VN, US, CHINA, ASIAN
 	}
 
 	public static enum NEWS_ORDER {

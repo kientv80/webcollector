@@ -10,13 +10,15 @@ import net.htmlparser.jericho.Source;
 
 public class TinTrongNuocArticleCollector extends ArticleCollector {
 
-	String urls[] = new String[] { "http://tuoitre.vn/tin/chinh-tri-xa-hoi",
+	String urls[] = new String[] {
+			"http://tuoitre.vn/tin/chinh-tri-xa-hoi",
 			"http://tuoitre.vn/tin/chinh-tri-xa-hoi/thoi-su-suy-nghi",
 			"http://tuoitre.vn/tin/chinh-tri-xa-hoi/phong-su-ky-su",
 			"http://tuoitre.vn/tin/chinh-tri-xa-hoi/moi-truong",
 			"http://tuoitre.vn/tin/chinh-tri-xa-hoi/chuyen-thuong-ngay",
 			"http://tuoitre.vn/tin/chinh-tri-xa-hoi/tieu-diem", "http://tuoitre.vn/tin/phap-luat",
-			"http://tuoitre.vn/tin/nhip-song-tre", "http://vnexpress.net/tin-tuc/thoi-su"};
+			"http://tuoitre.vn/tin/nhip-song-tre", 
+			"http://vnexpress.net/tin-tuc/thoi-su"};
 
 	public TinTrongNuocArticleCollector(long repeatTime) {
 		super(repeatTime);
