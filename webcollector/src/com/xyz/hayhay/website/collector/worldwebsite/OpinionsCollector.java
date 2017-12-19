@@ -20,7 +20,6 @@ public class OpinionsCollector extends ArticleCollector {
 
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
-		System.out.println("collect Opinions>>>>>>>>>>");
 		if ("washingtonpost.com".equals(fromWebsite)) {
 			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
 		}

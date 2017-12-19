@@ -39,13 +39,10 @@ public class WebCollector {
 	private static final int EIGHT_HOURS= 8*ONE_HOUR;
 	Logger log = Logger.getLogger(WebCollector.class);
 	public static StringBuilder collectResult = new StringBuilder();
-	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
+//	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 	boolean run = true;
 	
 	public void start() {
-		if(!run)
-			return;
-		
 
 		//Collect News
 		CollectorManager cMng = CollectorManager.getInstance();

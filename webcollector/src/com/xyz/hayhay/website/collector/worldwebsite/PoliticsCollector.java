@@ -22,7 +22,6 @@ public class PoliticsCollector extends ArticleCollector {
 
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
-		System.out.println("collect Politics>>>>>>>>>>");
 		if ("foxnews.com".equals(fromWebsite)) {
 			return new FoxNewsParser().collectArticle(source, url, fromWebsite);
 		}else if ("nytimes.com".equals(fromWebsite)) {

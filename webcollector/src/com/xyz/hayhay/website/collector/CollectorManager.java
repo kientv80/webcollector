@@ -57,8 +57,7 @@ public class CollectorManager {
 	public static long lastTimeCollected;
 
 	public void startCollectorManager() {
-		if (!run)
-			return;
+
 		Timer wnewsTimer = new Timer();
 		wnewsTimer.schedule(new TimerTask() {
 			@Override
@@ -72,68 +71,71 @@ public class CollectorManager {
 	}
 
 	public void start() {
+		if (processing)
+			return;
+		System.out.println("start processing");
 		setProcessing(true);
-
+		
 		try {
 			List<News> allNews = new ArrayList<>();
 			Map<Integer, Set<String>> allTiles = loadAllNewsTitles();
 			for (ArticleCollector websiteCollector : collector) {
-				// if (!websiteCollector.isCollecting()
-				// && (System.currentTimeMillis() -
-				// websiteCollector.getLastTimeProcessed()) > websiteCollector
-				// .getRepeatTime()) {
-				try {
-					websiteCollector.setCollecting(true);
-					String website = null;
+				if (!websiteCollector.isCollecting()
+						&& (System.currentTimeMillis() - websiteCollector.getLastTimeProcessed()) > websiteCollector
+								.getRepeatTime()) {
+					try {
+						websiteCollector.setCollecting(true);
+						String website = null;
 
-					try (Connection con = JDBCConnection.getInstance().getConnection()) {
-						for (String url : websiteCollector.collectedUrls()) {
-							try {
-								website = getfromWeb(url);
-								Source s = getSource(url);
-								List<News> articles = websiteCollector.collectArticle(s, url, website);
-								if (s != null) {
-									s.clearCache();
-									s = null;
-								}
-								Website w = new Website();
-								w.setOverwrite(websiteCollector.overwrite());
-								w.setName(website);
-								w.setNews(articles);
-
-								if (w.getNews() != null) {
-									w.getNews().removeAll(allNews);
-									allNews.addAll(w.getNews());
-									List<News> removedNews = new ArrayList<>();
-									for (News n : w.getNews()) {
-										int partition = Math.abs(n.getTitle().hashCode() % 10);
-										Set<String> titles = allTiles.get(partition);
-										if (titles != null && titles.contains(n.getTitle())) {
-											removedNews.add(n);
-										}
+						try (Connection con = JDBCConnection.getInstance().getConnection()) {
+							for (String url : websiteCollector.collectedUrls()) {
+								try {
+									website = getfromWeb(url);
+									Source s = getSource(url);
+									List<News> articles = websiteCollector.collectArticle(s, url, website);
+									if (s != null) {
+										s.clearCache();
+										s = null;
 									}
-									w.getNews().removeAll(removedNews);
-									storeNews(w, con);
-									w.getNews().clear();
-									w = null;
-								}
+									Website w = new Website();
+									w.setOverwrite(websiteCollector.overwrite());
+									w.setName(website);
+									w.setNews(articles);
 
-							} catch (Exception e) {
-								log.error("URL=" + url, e);
-								System.out.println(e.getMessage() + websiteCollector.getClass().getSimpleName()
-										+ "  url = " + url);
-								e.printStackTrace();
+									if (w.getNews() != null) {
+										System.out.println("Collect " + w.getNews().size() + " news for website " + w.getName());
+										w.getNews().removeAll(allNews);
+										allNews.addAll(w.getNews());
+										List<News> removedNews = new ArrayList<>();
+										for (News n : w.getNews()) {
+											int partition = Math.abs(n.getTitle().hashCode() % 10);
+											Set<String> titles = allTiles.get(partition);
+											if (titles != null && titles.contains(n.getTitle())) {
+												removedNews.add(n);
+											}
+										}
+										w.getNews().removeAll(removedNews);
+										storeNews(w, con);
+										w.getNews().clear();
+										w = null;
+									}
+
+								} catch (Exception e) {
+									log.error("URL=" + url, e);
+									System.out.println(e.getMessage() + websiteCollector.getClass().getSimpleName()
+											+ "  url = " + url);
+									e.printStackTrace();
+								}
 							}
 						}
+
+					} finally {
+						websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
+						websiteCollector.setCollecting(false);
 					}
 
-				} finally {
-					websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
-					websiteCollector.setCollecting(false);
 				}
-
 			}
-			// }
 			// Remove duplicated and old news
 			try (Connection conn = JDBCConnection.getInstance().getConnection()) {
 				try (Statement stm = conn.createStatement()) {
@@ -146,12 +148,11 @@ public class CollectorManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		} catch (
-
-		Exception ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
 			setProcessing(false);
+			System.out.println("End processing");
 		}
 
 	}
@@ -248,6 +249,7 @@ public class CollectorManager {
 				 * } }
 				 */
 				if (website.getNews() != null && website.getNews().size() > 0) {
+					System.out.println("Store " + website.getNews().size() + " news for website " + website.getName());
 					try (PreparedStatement stm = con.prepareStatement(
 							"insert into news(title,shotdesc,url,fromwebsite,imageurl,type,ishotnews,newsorder,collectedtime,title_id,parent_catename,country)values(?,?,?,?,?,?,?,?,?,?,?,?)")) {
 						int count = 0;

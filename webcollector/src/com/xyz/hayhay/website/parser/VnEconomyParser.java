@@ -24,29 +24,37 @@ public class VnEconomyParser extends BaseParser {
 
 		Image image = new Image("img", null, null, false);
 		image.setValueFromAtttributeName("src");
-		ShotDescription p = new ShotDescription("p", "class", "hdcontencmmid", true);
+		ShotDescription p = new ShotDescription("p", "data-type", "sapo", true);
 		;
 
 		List<News> vneconomy = new ArrayList<>();
 		String type = "";
+		String ptype = "";
 		if (url.contains("tai-chinh.htm")) {
 			type = NewsTypes.TYPE.Finance.name();
+			ptype = NewsTypes.CATEGORY.Economic.name();
 		} else if (url.contains("ngan-hang.htm")) {
 			type = NewsTypes.TYPE.Banking.name();
 		} else if (url.contains("thue-ngan-sach.htm")) {
 			type = NewsTypes.TYPE.Budget.name();
+			ptype = NewsTypes.CATEGORY.Economic.name();
 		} else if (url.contains("lai-suat.htm")) {
 			type = NewsTypes.TYPE.Banking.name();
+			ptype = NewsTypes.CATEGORY.Economic.name();
 		} else if (url.contains("thi-truong-vang.htm")) {
 			type = NewsTypes.TYPE.Gold.name();
+			ptype = NewsTypes.CATEGORY.Economic.name();
 		} else if (url.contains("ty-gia.htm?")) {
 			type = NewsTypes.TYPE.Banking.name();
+			ptype = NewsTypes.CATEGORY.Economic.name();
 		} else if (url.contains("chung-khoan.htm")) {
 			type = NewsTypes.TYPE.Stock.name();
+			ptype = NewsTypes.CATEGORY.Economic.name();
 		} else if (url.contains("bat-dong-san.htm")) {
 			type = NewsTypes.TYPE.Realty.name();
+			ptype = NewsTypes.CATEGORY.Realty.name();
 		}
-		collectArticles(s, vneconomy, a, t, image, p, type, fromWebsite);
+		collectArticles(s, vneconomy, a, t, image, p, type, ptype, fromWebsite);
 		// special case, change image for mobile to image for pc
 		for (News n : vneconomy) {
 			if (n.getImageUrl().indexOf("80_50") > 0)
@@ -61,10 +69,10 @@ public class VnEconomyParser extends BaseParser {
 	}
 
 	private void collectArticles(Source source, List<News> vneconomy, A a, Title t, Image image, ShotDescription p,
-			String type, String fromWeb) {
+			String type, String ptype, String fromWeb) {
 
-		if (source.getAllElementsByClass("hdcmleft") != null && source.getAllElementsByClass("hdcmleft").size() > 0) {
-			for (Element midNews : source.getAllElementsByClass("hdcmleft").get(0).getChildElements()) {
+		if (source.getElementById("LoadTimeLine") != null) {
+			for (Element midNews : source.getElementById("LoadTimeLine").getAllElements("li")) {
 				News mn = new News();
 				mn.setFromWebSite(fromWeb);
 				mn.setType(type);
@@ -83,69 +91,6 @@ public class VnEconomyParser extends BaseParser {
 				}
 			}
 		}
-		if (source.getAllElementsByClass("ultopmid moinhat-cont") != null
-				&& source.getAllElementsByClass("ultopmid moinhat-cont").size() > 0) {
-			for (Element midNews : source.getAllElementsByClass("ultopmid moinhat-cont").get(0).getChildElements()) {
-				News mn = new News();
-				mn.setFromWebSite(fromWeb);
-				mn.setType(type);
-				mn.setNewsOrder(News.NEWS_ORDER.HI.name());
-				if (NewsTypes.TYPE.Realty.name().equals(type)) {
-					mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
-				} else {
-					mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
-				}
-				parseElementToNews(midNews, mn, a, t, image, null);
-				if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
-						&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-					if (!vneconomy.contains(mn)) {
-						vneconomy.add(mn);
-					}
-				}
-			}
-		}
-		t.setElementValue("titletopmid2 ");
-		p.setElementValue("contenttopmid2");
-		for (Element midNews : source.getAllElementsByClass("boxnewsupdateitem")) {
-			News mn = new News();
-			mn.setFromWebSite(fromWeb);
-			mn.setType(type);
-			mn.setNewsOrder(News.NEWS_ORDER.M.name());
-			if (NewsTypes.TYPE.Realty.name().equals(type)) {
-				mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
-			} else {
-				mn.setParentCateName(NewsTypes.CATEGORY.Economic.name());
-			}
-			parseElementToNews(midNews, mn, a, t, image, p);
-			if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
-					&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-				if (!vneconomy.contains(mn)) {
-					vneconomy.add(mn);
-				}
-			}
-		}
-
-		t.setElementValue("boxright5content");
-		if (source.getAllElementsByClass("boxright5") != null && source.getAllElementsByClass("boxright5").size() > 0) {
-			for (Element midNews : source.getAllElementsByClass("boxright5").get(0).getChildElements().get(1)
-					.getChildElements()) {
-				News mn = new News();
-				mn.setFromWebSite(fromWeb);
-				mn.setType(type);
-				mn.setNewsOrder(News.NEWS_ORDER.M.name());
-				if (NewsTypes.TYPE.Realty.name().equals(type)) {
-					mn.setParentCateName(NewsTypes.CATEGORY.Realty.name());
-				} else {
-					mn.setParentCateName(NewsTypes.CATEGORY.Economic.name());
-				}
-				parseElementToNews(midNews, mn, a, t, image, null);
-				if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
-						&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-					if (!vneconomy.contains(mn)) {
-						vneconomy.add(mn);
-					}
-				}
-			}
-		}
+		
 	}
 }
