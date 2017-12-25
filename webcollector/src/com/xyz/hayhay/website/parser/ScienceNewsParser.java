@@ -30,6 +30,7 @@ public class ScienceNewsParser extends BaseParser{
 			for(Element article : articles){
 				News n = new News(News.COUNTRY.US.name());
 				n.setFromWebSite(fromWebsite);
+				n.setLang(News.LANGUAGE.ENGLISH.name());
 				n.setType(NewsTypes.TYPE.Science.name());
 				n.setParentCateName(NewsTypes.CATEGORY.Science.name());
 				parseElementToNews(article, n, a, title, i, p);

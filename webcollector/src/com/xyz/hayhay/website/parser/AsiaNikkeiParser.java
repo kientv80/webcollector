@@ -19,40 +19,53 @@ public class AsiaNikkeiParser extends BaseParser {
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		List<News> news = new ArrayList<>();
 		List<Element> newsFeed = source.getAllElementsByClass("article-box");
-		List<Element> articles =  newsFeed.get(0).getAllElements("li");
-
+		newsFeed.addAll(source.getAllElementsByClass("features-list"));
+		List<Element> articles =  new ArrayList<>();
+		for(Element e : newsFeed){
+			articles.addAll(e.getAllElements("li"));
+		}
 		if (articles != null && !articles.isEmpty()) {
 			A a = new A();
 			a.setDomain("https://asia.nikkei.com");
 			
+			Title title = new Title("h2", "class", "title", true);
+
 			
-			Title title = new Title("a", null, null, true);
-			title.setValueFromAtttributeName("alt");
 			Image i = new Image();
 			i.setDomain("https://asia.nikkei.com");
 			ShotDescription p = new ShotDescription("p", "class", "subhead02", true);
 			for (Element article : articles) {
 				News n = new News(News.COUNTRY.ASIAN.name());
 				n.setFromWebSite(fromWebsite);
-				if (url.endsWith("Policy-Politics")) {
+				n.setLang(News.LANGUAGE.ENGLISH.name());
+				if (url.endsWith("asia.nikkei.com")) {
+					n.setType(NewsTypes.TYPE.HotNews.name());
+					n.setParentCateName(NewsTypes.CATEGORY.HotNews.name());
+					title = new Title("h2", "class", "title", true);
+				} else if (url.endsWith("Policy-Politics")) {
 					n.setType(NewsTypes.TYPE.Politics.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Politics.name());
-				} else if (url.contains("Economy")) {
+				} else if (url.endsWith("Economy/")) {
 					n.setType(NewsTypes.TYPE.Economic.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Economic.name());
-				} else if (url.contains("Companies")) {
+				} else if (url.endsWith("Companies/")) {
 					n.setType(NewsTypes.TYPE.Company.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Business.name());
 				} else if (url.contains("Capital-Markets")) {
 					n.setType(NewsTypes.TYPE.Economic.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Economic.name());
-				} else if (url.contains("Tech")) {
+				} else if (url.endsWith("Tech/")) {
 					n.setType(NewsTypes.TYPE.Tech.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Tech.name());
-				} else if (url.contains("Tech")) {
+				} else if (url.contains("Science/")) {
 					n.setType(NewsTypes.TYPE.Science.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Science.name());
+				} else if (url.contains("Consumers/")) {
+					n.setType(NewsTypes.TYPE.Economic.name());
+					n.setParentCateName(NewsTypes.CATEGORY.Economic.name());
 				}
+				
+				
 				parseElementToNews(article, n, a, title, i, p);
 				if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getImageUrl() != null
 						&& !n.getImageUrl().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty() && !news.contains(n)) {

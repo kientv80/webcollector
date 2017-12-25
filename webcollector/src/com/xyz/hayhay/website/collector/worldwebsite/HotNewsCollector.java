@@ -4,16 +4,23 @@ import java.util.List;
 
 import com.xyz.hayhay.entirty.News;
 import com.xyz.hayhay.website.collector.ArticleCollector;
+import com.xyz.hayhay.website.parser.AsiaNikkeiParser;
 import com.xyz.hayhay.website.parser.ChinaDailyParser;
-import com.xyz.hayhay.website.parser.FoxNewsParser;
-import com.xyz.hayhay.website.parser.NYTimesParser;
+import com.xyz.hayhay.website.parser.EpochtimesParser;
 import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
 import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 
 import net.htmlparser.jericho.Source;
 
 public class HotNewsCollector extends ArticleCollector {
-	String[] urls = new String[] { "http://www.chinadaily.com.cn/china/", "http://www.scmp.com/news/china/society","https://www.washingtonpost.com/" };
+	String[] urls = new String[] {
+			"http://www.epochtimes.com/gb/n24hr.htm",
+			"http://www.epochtimes.com/gb/ncyule.htm", 
+			"http://www.chinadaily.com.cn/china/", 
+			"http://www.scmp.com/news/china/society",
+			"https://www.washingtonpost.com/",
+			"https://asia.nikkei.com/"
+			};
 
 	public HotNewsCollector(long repeatTime) {
 		super(repeatTime);
@@ -27,6 +34,10 @@ public class HotNewsCollector extends ArticleCollector {
 			return new SouthChinaMorningPostParser().collectArticle(source, url, fromWebsite);
 		} else if ("washingtonpost.com".equals(fromWebsite)) {
 			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
+		}else if ("epochtimes.com".equals(fromWebsite)) {
+			return new EpochtimesParser().collectArticle(source, url, fromWebsite);
+		}else if ("asia.nikkei.com".equals(fromWebsite)) {
+			return new AsiaNikkeiParser().collectArticle(source, url, fromWebsite);
 		}
 		
 		return null;

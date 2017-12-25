@@ -41,6 +41,7 @@ public class FoxNewsParser extends BaseParser {
 			for (Element article : articles) {
 				News n = new News(News.COUNTRY.US.name());
 				n.setFromWebSite(fromWebsite);
+				n.setLang(News.LANGUAGE.ENGLISH.name());
 				if (fromWebsite.contains("foxbusiness")) {
 					n.setType(NewsTypes.TYPE.Business.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Business.name());

@@ -34,6 +34,7 @@ public class ChinaDailyParser extends BaseParser {
 			for (Element article : articles) {
 				News n = new News(News.COUNTRY.CHINA.name());
 				n.setFromWebSite(fromWebsite);
+				n.setLang(News.LANGUAGE.ENGLISH.name());
 				if(url.contains("business")){
 					n.setType(NewsTypes.TYPE.Business.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Business.name());

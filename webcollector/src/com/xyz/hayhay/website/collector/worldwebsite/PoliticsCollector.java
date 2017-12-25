@@ -30,10 +30,9 @@ public class PoliticsCollector extends ArticleCollector {
 			return new SouthChinaMorningPostParser().collectArticle(source, url, fromWebsite);
 		}else if ("washingtonpost.com".equals(fromWebsite)) {
 			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
+		} else if ("asia.nikkei.com".equals(fromWebsite)) {
+			return new AsiaNikkeiParser().collectArticle(source, url, fromWebsite);
 		}
-//		else if ("asia.nikkei.com".equals(fromWebsite)) {
-//			return new AsiaNikkeiParser().collectArticle(source, url, fromWebsite);
-//		}
 		return null;
 	}
 

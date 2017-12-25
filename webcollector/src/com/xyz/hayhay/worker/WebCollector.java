@@ -1,8 +1,5 @@
 package com.xyz.hayhay.worker;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
 import org.apache.log4j.Logger;
 
 import com.xyz.hayhay.ping.PingServer;

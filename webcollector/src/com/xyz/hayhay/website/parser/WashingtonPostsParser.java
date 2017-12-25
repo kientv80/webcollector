@@ -75,6 +75,7 @@ public class WashingtonPostsParser extends BaseParser {
 			for (Element article : articles) {
 				News n = new News(News.COUNTRY.US.name());
 				n.setFromWebSite(fromWebsite);
+				n.setLang(News.LANGUAGE.ENGLISH.name());
 				if (url.equals("https://www.washingtonpost.com/")) {
 					n.setType(NewsTypes.TYPE.HotNews.name());
 					n.setParentCateName(NewsTypes.CATEGORY.HotNews.name());

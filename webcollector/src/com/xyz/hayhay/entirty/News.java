@@ -7,7 +7,9 @@ public class News {
 	public static enum COUNTRY {
 		VN, US, CHINA, ASIAN
 	}
-
+	public static enum LANGUAGE {
+		VIETNAMESE, ENGLISH, CHINESE
+	}
 	public static enum NEWS_ORDER {
 		H, HI, M
 	};// hotnews,highlight news, mid news
@@ -149,7 +151,7 @@ public class News {
 	boolean is360hayArticle;
 	private String uniqueName = "";
 	private String parentCateName;
-
+	private String lang;
 	/**
 	 * @return the is360hayArticle
 	 */
@@ -333,5 +335,13 @@ public class News {
 		content.append("Type:").append(type).append("\n");
 
 		return content.toString();
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 }
