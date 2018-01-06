@@ -28,23 +28,12 @@ public class TuoiTreParser extends BaseParser {
 
 		String type = NewsTypes.TYPE.HotNews.name();
 		String parentCate = NewsTypes.CATEGORY.HotNews.name();
-		if (url.endsWith("thoi-su-suy-nghi"))
-			type = NewsTypes.TYPE.HotNews.name();
-		else if (url.endsWith("phong-su-ky-su"))
-			type = NewsTypes.TYPE.HotNews.name();
-		else if (url.endsWith("/chuyen-thuong-ngay"))
-			type = NewsTypes.TYPE.HotNews.name();
-		else if (url.endsWith("tieu-diem"))
-			type = NewsTypes.TYPE.HotNews.name();
-		else if (url.endsWith("/phap-luat"))
-			type = NewsTypes.TYPE.HotNews.name();
-		else if (url.endsWith("/nhip-song-tre"))
-			type = NewsTypes.TYPE.HotNews.name();
-		else if (url.endsWith("/moi-truong"))
-			type = NewsTypes.TYPE.HotNews.name();
-		else if (url.endsWith("/kinh-te")){
+		if (url.endsWith("kinh-doanh.htm")){
 			type = NewsTypes.TYPE.Economic.name();
 			parentCate = NewsTypes.CATEGORY.Economic.name();
+		}else if (fromWebsite.endsWith("congnghe.tuoitre.vn")){
+			type = NewsTypes.TYPE.Tech.name();
+			parentCate = NewsTypes.CATEGORY.Tech.name();
 		}
 		if(type == null || type.isEmpty())
 			return null;
@@ -56,7 +45,7 @@ public class TuoiTreParser extends BaseParser {
 			String fromWebsite) {
 		List<News> tuoitreNews = new ArrayList<>();
 		
-		List<Element> hostNews = source.getAllElementsByClass("focus_bottom clear").get(0).getAllElements("li");
+		List<Element> hostNews = source.getAllElementsByClass("list-top").get(0).getAllElements("li");
 		for(Element hn : hostNews){
 			News n = new News();
 			n.setFromWebSite(fromWebsite);
@@ -83,7 +72,7 @@ public class TuoiTreParser extends BaseParser {
 				parseElementToNews(midNews, mn, a, t, image, p);
 				if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
 						&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
-					if (tuoitreNews.size() < 10 && !tuoitreNews.contains(mn)) {
+					if (!tuoitreNews.contains(mn)) {
 						tuoitreNews.add(mn);
 					}
 				}

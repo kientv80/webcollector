@@ -30,7 +30,7 @@ import com.xyz.hayhay.entirty.Website;
 import net.htmlparser.jericho.Source;
 
 public class CollectorManager {
-	public static final int COLLECTING_PERIOD = 1 * 5 * 60 * 1000;
+	public static final int COLLECTING_PERIOD = 1 * 2 * 60 * 1000;
 	public Logger log = Logger.getLogger(CollectorManager.class);
 
 	private List<ArticleCollector> collector = null;
@@ -47,32 +47,33 @@ public class CollectorManager {
 	}
 
 	private CollectorManager() {
-		collector = new ArrayList<>();
+		setCollector(new ArrayList<ArticleCollector>());
 	}
 
 	public void register(ArticleCollector wcollector) {
-		collector.add(wcollector);
+		getCollector().add(wcollector);
 	}
 
 	boolean run = true;
 	public static long lastTimeCollected;
 	int currentDay = 0;
 
-	public void startCollectorManager() {
+	public void startCollectorManager(int from, int num) {
 
-		Timer wnewsTimer = new Timer();
-		wnewsTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				lastTimeCollected = System.currentTimeMillis();
-				if (!isProcessing()) {
-					start();
-				}
-			}
-		}, 0, COLLECTING_PERIOD);// run every 5 minutes
+//		Timer wnewsTimer = new Timer();
+//		wnewsTimer.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+//				lastTimeCollected = System.currentTimeMillis();
+//				if (!isProcessing()) {
+//					start();
+//				}
+//			}
+//		}, 0, COLLECTING_PERIOD);// run every 5 minutes
+		start(from, num);
 	}
 
-	public void start() {
+	public void start(int from, int num) {
 		if (processing)
 			return;
 		System.out.println("start processing");
@@ -80,63 +81,74 @@ public class CollectorManager {
 
 		try {
 			List<News> allNews = new ArrayList<>();
+			int count = 0;
+			
 			try (Connection con = JDBCConnection.getInstance().getConnection()) {
 				Map<Integer, Set<String>> allTiles = loadAllNewsTitles(con);
-				for (ArticleCollector websiteCollector : collector) {
-					if (!websiteCollector.isCollecting()
-							&& (System.currentTimeMillis() - websiteCollector.getLastTimeProcessed()) > websiteCollector
-									.getRepeatTime()) {
-						try {
-							websiteCollector.setCollecting(true);
-							String website = null;
+				for (ArticleCollector websiteCollector : getCollector()) {
+					if(count >=from && count < num && count < getCollector().size()){
+						
+						if (!websiteCollector.isCollecting()
+								&& (System.currentTimeMillis() - websiteCollector.getLastTimeProcessed()) > websiteCollector
+										.getRepeatTime()) {
+							try {
+								websiteCollector.setCollecting(true);
+								String website = null;
 
-							for (String url : websiteCollector.collectedUrls()) {
-								try {
-									website = getfromWeb(url);
-									Source s = getSource(url);
-									List<News> articles = websiteCollector.collectArticle(s, url, website);
-									if (s != null) {
-										s.clearCache();
-										s = null;
-									}
-									Website w = new Website();
-									w.setOverwrite(websiteCollector.overwrite());
-									w.setName(website);
-									w.setNews(articles);
-
-									if (w.getNews() != null) {
-										System.out.println(
-												"Collect " + w.getNews().size() + " news for website " + w.getName());
-										w.getNews().removeAll(allNews);
-										allNews.addAll(w.getNews());
-										List<News> removedNews = new ArrayList<>();
-										for (News n : w.getNews()) {
-											int partition = Math.abs(n.getTitle().hashCode() % 10);
-											Set<String> titles = allTiles.get(partition);
-											if (titles != null && titles.contains(n.getTitle())) {
-												removedNews.add(n);
-											}
+								for (String url : websiteCollector.collectedUrls()) {
+									try {
+										website = getfromWeb(url);
+										Source s = getSource(url);
+										List<News> articles = websiteCollector.collectArticle(s, url, website);
+										if (s != null) {
+											s.clearCache();
+											s = null;
 										}
-										w.getNews().removeAll(removedNews);
-										storeNews(w, con);
-										w.getNews().clear();
-										w = null;
+										Website w = new Website();
+										w.setOverwrite(websiteCollector.overwrite());
+										w.setName(website);
+										w.setNews(articles);
+
+										if (w.getNews() != null) {
+											System.out.println(
+													"Collect " + w.getNews().size() + " news for website " + w.getName());
+											w.getNews().removeAll(allNews);
+											allNews.addAll(w.getNews());
+											List<News> removedNews = new ArrayList<>();
+											for (News n : w.getNews()) {
+												int partition = Math.abs(n.getTitle().hashCode() % 10);
+												Set<String> titles = allTiles.get(partition);
+												if (titles != null && titles.contains(n.getTitle())) {
+													removedNews.add(n);
+												}
+											}
+											w.getNews().removeAll(removedNews);
+											storeNews(w, con);
+											w.getNews().clear();
+											w = null;
+										}
+
+									} catch (Exception e) {
+										log.error("URL=" + url, e);
+										System.out.println(e.getMessage() + websiteCollector.getClass().getSimpleName()
+												+ "  url = " + url);
+										e.printStackTrace();
 									}
-
-								} catch (Exception e) {
-									log.error("URL=" + url, e);
-									System.out.println(e.getMessage() + websiteCollector.getClass().getSimpleName()
-											+ "  url = " + url);
-									e.printStackTrace();
 								}
-							}
 
-						} finally {
-							websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
-							websiteCollector.setCollecting(false);
+							} finally {
+								websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
+								websiteCollector.setCollecting(false);
+							}
 						}
+						
 					}
+					count++;
 				}
+				allTiles.clear();
+				allTiles = null;
+				allNews.clear();
+				allNews = null;
 				// Remove duplicated and old news
 				if (currentDay != Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
 					currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
@@ -267,7 +279,11 @@ public class CollectorManager {
 									}
 									st.executeBatch();
 								}
+								updateList.clear();
+								updateList = null;
 							}
+							oldNews.clear();
+							oldNews = null;
 						} else {
 							newNews = website.getNews();
 						}
@@ -309,9 +325,11 @@ public class CollectorManager {
 								stm.executeBatch();
 							}
 						}
-
+						newNews.clear();
+						newNews = null;
 					}
 				}
+				
 			} catch (Exception e) {
 				log.error("", e);
 				e.printStackTrace();
@@ -355,6 +373,14 @@ public class CollectorManager {
 
 	public synchronized void setProcessing(boolean processing) {
 		this.processing = processing;
+	}
+
+	public List<ArticleCollector> getCollector() {
+		return collector;
+	}
+
+	public void setCollector(List<ArticleCollector> collector) {
+		this.collector = collector;
 	}
 
 }

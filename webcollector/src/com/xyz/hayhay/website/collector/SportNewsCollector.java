@@ -11,6 +11,7 @@ import com.xyz.hayhay.entirty.webcollection.ShotDescription;
 import com.xyz.hayhay.entirty.webcollection.Title;
 import com.xyz.hayhay.website.parser.TheThaoTVParser;
 import com.xyz.hayhay.website.parser.Thethao247Parser;
+import com.xyz.hayhay.website.parser.TienPhongParser;
 import com.xyz.hayhay.website.parser.Web24HParser;
 
 import net.htmlparser.jericho.Element;
@@ -26,13 +27,14 @@ public class SportNewsCollector extends ArticleCollector {
 			"http://www.24h.com.vn/bong-da-c48.html",
 			"http://www.24h.com.vn/su-kien-binh-luan-c447.html",
 			"http://www.24h.com.vn/anh-bong-da-nguoi-dep-c507.html", "http://bongda24h.vn",
-			 "http://thethaotv.vn/bong-da-viet-nam","http://thethaotv.vn/bong-da-quoc-te", "http://thethaotv.vn/tennis",
-			 "http://thethaotv.vn/hau-truong" };
+			"https://www.tienphong.vn/the-thao/" };
 
 	private List<News> collectFrom24h(Source s, String url, String fromWebsite) {
 		if(url.contains("thethaotv.vn")){
 			return new TheThaoTVParser().collectArticle(s, url, fromWebsite);
-		}else{
+		}else if(url.contains("tienphong.vn")){
+			return new TienPhongParser().collectArticle(s, url, fromWebsite);
+		} else{
 			return new Web24HParser().collectArticle(s, url, fromWebsite);
 		}
 		

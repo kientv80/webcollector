@@ -1,6 +1,11 @@
 package com.xyz.hayhay.website.collector;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
+
+import org.htmlparser.Parser;
+import org.htmlparser.util.NodeIterator;
 
 import com.xyz.hayhay.entirty.News;
 import com.xyz.hayhay.entirty.webcollection.A;
@@ -139,4 +144,60 @@ public abstract class ArticleCollector {
 		}
 		return false;
 	}
+	public void test() throws Exception{
+		for(String url : collectedUrls()){
+			String website = getfromWeb(url);
+			Source s = getSource(url);
+			List<News> articles = collectArticle(s, url, website);
+			
+		}
+	}
+	private String getfromWeb(String url) {
+		String website;
+		String http = "http://";
+		if (url.startsWith("https://"))
+			http = "https://";
+		if (url.indexOf("/", http.length()) > 0)
+			website = url.substring(http.length(), url.indexOf("/", http.length()));
+		else
+			website = url.substring(http.length());
+		if (website.startsWith("m.")) {
+			website = website.substring("m.".length());
+		} else if (website.startsWith("www.")) {
+			website = website.substring("www.".length());
+		}
+		return website;
+	}
+
+	private Source getSource(String url) throws Exception {
+		StringBuilder content = new StringBuilder();
+		try {
+			Parser pa = new Parser(url);
+			NodeIterator no = pa.elements();
+
+			while (no.hasMoreNodes()) {
+				content.append(no.nextNode().toHtml());
+			}
+		} catch (Exception e) {
+			content = loadContentByCurl(url);
+		}
+		Source s = new Source(content);
+		return s;
+	}
+
+	private StringBuilder loadContentByCurl(String url) throws Exception {
+		Process process = Runtime.getRuntime().exec("curl " + url);
+
+		StringBuilder content = new StringBuilder();
+		BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+		String line = null;
+
+		while ((line = input.readLine()) != null) {
+			content.append(line).append("\n");
+		}
+		// System.out.println(content);
+		return content;
+	}
+
 }

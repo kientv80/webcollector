@@ -29,7 +29,7 @@ public class PingServer {
 				}
 			}
 		}catch(Exception ex){
-			
+			ex.printStackTrace();
 		}finally {
 			if(svSocket != null && !svSocket.isClosed())
 				try {

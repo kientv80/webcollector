@@ -23,7 +23,7 @@ public class VnExpressParser extends BaseParser {
 	private List<News> collectNews(Source source, String url, String fromWebsite) {
 		String type = "";
 		String parentType = "";
-		if (url.indexOf("thoi-su") > 0) {
+		if (url.indexOf("thoi-su") > 0 || url.indexOf("phap-luat") > 0 || url.indexOf("giao-duc") > 0) {
 			type = NewsTypes.TYPE.HotNews.name();
 			parentType = NewsTypes.CATEGORY.HotNews.name();
 		} else if (url.indexOf("bat-dong-san") > 0) {
@@ -50,7 +50,17 @@ public class VnExpressParser extends BaseParser {
 		} else if (url.contains("oto-xe-may")) {
 			type = NewsTypes.TYPE.Car.name();
 			parentType = NewsTypes.CATEGORY.CarAndMotor.name();
+		} else if (url.contains("khoa-hoc")) {
+			type = NewsTypes.TYPE.Science.name();
+			parentType = NewsTypes.CATEGORY.Science.name();
+		}else if("giaitri.vnexpress.net".equals(fromWebsite)){
+			type = NewsTypes.TYPE.FamousPerson.name();
+			parentType = NewsTypes.CATEGORY.Entertainment.name();
+		}else if("kinhdoanh.vnexpress.net".equals(fromWebsite)){
+			type = NewsTypes.TYPE.Economic.name();
+			parentType = NewsTypes.CATEGORY.Economic.name();
 		}
+		
 		if (type.isEmpty())
 			return null;
 

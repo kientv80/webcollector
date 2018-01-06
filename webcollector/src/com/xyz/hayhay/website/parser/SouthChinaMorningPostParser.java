@@ -37,6 +37,7 @@ public class SouthChinaMorningPostParser extends BaseParser {
 		if (articles != null && !articles.isEmpty()) {
 			for (Element article : articles) {
 				News n = new News(News.COUNTRY.CHINA.name());
+				n.setLang(News.LANGUAGE.ENGLISH.name());
 				n.setFromWebSite(fromWebsite);
 				if (url.contains("china/society")) {
 					n.setType(NewsTypes.TYPE.HotNews.name());

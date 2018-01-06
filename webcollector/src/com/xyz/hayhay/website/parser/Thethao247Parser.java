@@ -23,7 +23,7 @@ public class Thethao247Parser extends BaseParser {
 		Image image = new Image("img", "width", "200", false);
 		image.setValueFromAtttributeName("src");
 		A a = new A();
-		String type = NewsTypes.TYPE.Tennis.name();
+		String type = NewsTypes.TYPE.Sport.name();
 
 		List<News> sportNews = new ArrayList<>();
 		List<Element> newsItems = s.getAllElementsByClass("cat-row");

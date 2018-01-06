@@ -20,7 +20,8 @@ public class NewsTypes {
 		Science,Politics,Opinion,
 		Car,Motor,AdjustCar,SupperCar,
 		Realty,Building,Zoing,Architecture,BeautifulHouse, Material,
-		StatUp,Love,Family,MomAndBaby,Soul,Gender}
+		StatUp,Love,Family,MomAndBaby,Soul,Gender, Sport
+		}
 	public static Map<CATEGORY,List<TYPE>> cateTypeMapping = new HashMap<>();
 	static{
 		cateTypeMapping.put(CATEGORY.HotNews, Arrays.asList(new TYPE[]{TYPE.HotNews,TYPE.Politics,TYPE.Opinion}));

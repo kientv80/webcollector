@@ -8,6 +8,7 @@ import com.xyz.hayhay.website.parser.AsiaNikkeiParser;
 import com.xyz.hayhay.website.parser.FoxNewsParser;
 import com.xyz.hayhay.website.parser.NYTimesParser;
 import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
+import com.xyz.hayhay.website.parser.TuoiTreParser;
 import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 
 import net.htmlparser.jericho.Source;
@@ -17,7 +18,8 @@ public class TechNewsCollector extends ArticleCollector {
 									"http://www.foxnews.com/tech.html", 
 									"https://www.nytimes.com/section/technology?src=busfn",
 									"http://www.scmp.com/tech",
-									"https://www.washingtonpost.com/business/technology"};
+									"https://www.washingtonpost.com/business/technology",
+									"https://congnghe.tuoitre.vn/"};
 
 	public TechNewsCollector(long repeatTime) {
 		super(repeatTime);
@@ -35,6 +37,8 @@ public class TechNewsCollector extends ArticleCollector {
 			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
 		}else if ("asia.nikkei.com".equals(fromWebsite)){
 			return new AsiaNikkeiParser().collectArticle(source, url, fromWebsite);
+		}else if ("congnghe.tuoitre.vn".equals(fromWebsite)){
+			return new TuoiTreParser().collectArticle(source, url, fromWebsite);
 		}
 		return null;
 	}

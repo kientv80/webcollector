@@ -5,12 +5,17 @@ import java.util.List;
 import com.xyz.hayhay.entirty.News;
 import com.xyz.hayhay.website.parser.AsiaNikkeiParser;
 import com.xyz.hayhay.website.parser.PetrotimesParser;
+import com.xyz.hayhay.website.parser.TienPhongParser;
 import com.xyz.hayhay.website.parser.TuoiTreParser;
 
 import net.htmlparser.jericho.Source;
 
 public class KinhTeCollector extends ArticleCollector {
-	String[] urls = new String[] {"https://asia.nikkei.com/Politics-Economy/Economy/","https://asia.nikkei.com/Business/Consumers/", "http://petrotimes.vn/kinh-te", "http://tuoitre.vn/kinh-doanh.htm" };
+	String[] urls = new String[] {"https://asia.nikkei.com/Politics-Economy/Economy/",
+			"https://asia.nikkei.com/Business/Consumers/", 
+			"http://petrotimes.vn/kinh-te", 
+			"https://tuoitre.vn/kinh-doanh.htm" ,
+			"https://www.tienphong.vn/kinh-te/"};
 
 	public KinhTeCollector(long repeatTime) {
 		super(repeatTime);
@@ -24,6 +29,8 @@ public class KinhTeCollector extends ArticleCollector {
 			return new TuoiTreParser().collectArticle(source, url, fromWebsite);
 		}else if("asia.nikkei.com".equals(fromWebsite)){
 			return new AsiaNikkeiParser().collectArticle(source, url, fromWebsite);
+		}else if("tienphong.vn".equals(fromWebsite)){
+			return new TienPhongParser().collectArticle(source, url, fromWebsite);
 		}
 		return null;
 	}
