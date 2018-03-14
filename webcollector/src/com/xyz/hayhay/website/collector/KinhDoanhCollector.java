@@ -23,7 +23,7 @@ public class KinhDoanhCollector extends ArticleCollector{
 
 	@Override
 	public String[] collectedUrls() {
-		return "http://cafebiz.vn/nhan-vat.chn,http://cafebiz.vn/quan-tri.chn,http://cafebiz.vn/nghe-nghiep.chn,http://cafebiz.vn/thuong-hieu.chn,http://cafebiz.vn/welearn.chn,http://cafebiz.vn/doanh-nghiep-cong-nghe.chn,https://kinhdoanh.vnexpress.net/".split(",");
+		return "http://cafebiz.vn/nhan-vat.chn,http://cafebiz.vn/quan-tri.chn,http://cafebiz.vn/nghe-nghiep.chn,http://cafebiz.vn/thuong-hieu.chn,http://cafebiz.vn/welearn.chn,http://cafebiz.vn/doanh-nghiep-cong-nghe.chn,https://kinhdoanh.vnexpress.net/,https://thanhnien.vn/kinh-doanh/".split(",");
 	}
 
 }

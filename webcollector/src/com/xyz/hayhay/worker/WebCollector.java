@@ -109,7 +109,7 @@ public class WebCollector {
 							from = 0;
 						
 						System.out.println("Start new process");
-						Process p = Runtime.getRuntime().exec("sh /kientv/webcollector/startserver.sh", new String[]{"collect=true","from="+from,"num="+(from+2)});
+						Process p = Runtime.getRuntime().exec("sh /kientv/webcollector/startserver.sh", new String[]{"collect=true","from="+from,"num="+(from+4)});
 						InputStream in = p.getInputStream();
 						byte[] buff = new byte[1024];
 						while(in.read(buff) > 0){
@@ -117,13 +117,15 @@ public class WebCollector {
 						}
 						in.close();
 						p.waitFor();
-						from+=2;
+						from+=4;
 						running = false;
 						System.out.println("Finished process with returned code = " + p.exitValue());
-						CollectorManager.lastTimeCollected = System.currentTimeMillis();
+						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					}finally {
+						CollectorManager.lastTimeCollected = System.currentTimeMillis();
 					}
 				}
 			}, 0, CollectorManager.COLLECTING_PERIOD);// run every 5 minutes

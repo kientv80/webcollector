@@ -23,6 +23,7 @@ public class TinTrongNuocArticleCollector extends ArticleCollector {
 			"https://vnexpress.net/tin-tuc/phap-luat",
 			"https://vnexpress.net/tin-tuc/giao-duc",
 			"https://thanhnien.vn/viet-nam/",
+			"https://thanhnien.vn/the-gioi/",
 			"https://www.tienphong.vn/xa-hoi/",
 			"https://www.tienphong.vn/the-gioi/","https://www.tienphong.vn/phap-luat/","https://www.tienphong.vn/giao-duc/"};
 

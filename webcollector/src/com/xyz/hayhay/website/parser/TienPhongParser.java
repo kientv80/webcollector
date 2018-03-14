@@ -17,6 +17,7 @@ public class TienPhongParser extends BaseParser{
 
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
+		
 		List<Element> articles = new ArrayList<>();
 		Image i = new Image();
 		A a = new A();

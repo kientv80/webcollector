@@ -8,13 +8,15 @@ import com.xyz.hayhay.website.parser.AsiaNikkeiParser;
 import com.xyz.hayhay.website.parser.FoxNewsParser;
 import com.xyz.hayhay.website.parser.NYTimesParser;
 import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
+import com.xyz.hayhay.website.parser.TheguardianParser;
 import com.xyz.hayhay.website.parser.TuoiTreParser;
 import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 
 import net.htmlparser.jericho.Source;
 
 public class TechNewsCollector extends ArticleCollector {
-	String[] urls = new String[] { "https://asia.nikkei.com/Tech-Science/Tech/",
+	String[] urls = new String[] { "https://www.theguardian.com/uk/technology",
+									"https://asia.nikkei.com/Tech-Science/Tech/",
 									"http://www.foxnews.com/tech.html", 
 									"https://www.nytimes.com/section/technology?src=busfn",
 									"http://www.scmp.com/tech",
@@ -39,6 +41,8 @@ public class TechNewsCollector extends ArticleCollector {
 			return new AsiaNikkeiParser().collectArticle(source, url, fromWebsite);
 		}else if ("congnghe.tuoitre.vn".equals(fromWebsite)){
 			return new TuoiTreParser().collectArticle(source, url, fromWebsite);
+		}else if ("theguardian.com".equals(fromWebsite)) {
+			return new TheguardianParser().collectArticle(source, url, fromWebsite);
 		}
 		return null;
 	}

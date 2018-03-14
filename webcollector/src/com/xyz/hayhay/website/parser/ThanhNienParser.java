@@ -30,7 +30,10 @@ public class ThanhNienParser extends BaseParser{
 		String parentType = NewsTypes.CATEGORY.HotNews.name();
 		articles = source.getAllElementsByClass("subcate-highlight clearfix").get(0).getAllElements("article");
 		articles.addAll(source.getAllElementsByClass("cate-list").get(0).getAllElements("article"));
-		
+		if(url.endsWith("kinh-doanh/")){
+			type = NewsTypes.TYPE.Business.name();
+			parentType = NewsTypes.CATEGORY.Business.name();
+		}
 		if(type.isEmpty())
 			return null;
 		

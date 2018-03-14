@@ -30,7 +30,7 @@ import com.xyz.hayhay.entirty.Website;
 import net.htmlparser.jericho.Source;
 
 public class CollectorManager {
-	public static final int COLLECTING_PERIOD = 1 * 2 * 60 * 1000;
+	public static final int COLLECTING_PERIOD = 1 * 5 * 60 * 1000;
 	public Logger log = Logger.getLogger(CollectorManager.class);
 
 	private List<ArticleCollector> collector = null;
@@ -60,16 +60,16 @@ public class CollectorManager {
 
 	public void startCollectorManager(int from, int num) {
 
-//		Timer wnewsTimer = new Timer();
-//		wnewsTimer.schedule(new TimerTask() {
-//			@Override
-//			public void run() {
-//				lastTimeCollected = System.currentTimeMillis();
-//				if (!isProcessing()) {
-//					start();
-//				}
-//			}
-//		}, 0, COLLECTING_PERIOD);// run every 5 minutes
+		// Timer wnewsTimer = new Timer();
+		// wnewsTimer.schedule(new TimerTask() {
+		// @Override
+		// public void run() {
+		// lastTimeCollected = System.currentTimeMillis();
+		// if (!isProcessing()) {
+		// start();
+		// }
+		// }
+		// }, 0, COLLECTING_PERIOD);// run every 5 minutes
 		start(from, num);
 	}
 
@@ -82,15 +82,14 @@ public class CollectorManager {
 		try {
 			List<News> allNews = new ArrayList<>();
 			int count = 0;
-			
+
 			try (Connection con = JDBCConnection.getInstance().getConnection()) {
 				Map<Integer, Set<String>> allTiles = loadAllNewsTitles(con);
 				for (ArticleCollector websiteCollector : getCollector()) {
-					if(count >=from && count < num && count < getCollector().size()){
-						
-						if (!websiteCollector.isCollecting()
-								&& (System.currentTimeMillis() - websiteCollector.getLastTimeProcessed()) > websiteCollector
-										.getRepeatTime()) {
+					if (count >= from && count < num && count < getCollector().size()) {
+
+						if (!websiteCollector.isCollecting() && (System.currentTimeMillis()
+								- websiteCollector.getLastTimeProcessed()) > websiteCollector.getRepeatTime()) {
 							try {
 								websiteCollector.setCollecting(true);
 								String website = null;
@@ -110,8 +109,8 @@ public class CollectorManager {
 										w.setNews(articles);
 
 										if (w.getNews() != null) {
-											System.out.println(
-													"Collect " + w.getNews().size() + " news for website " + w.getName());
+											System.out.println("Collect " + w.getNews().size() + " news for website "
+													+ w.getName());
 											w.getNews().removeAll(allNews);
 											allNews.addAll(w.getNews());
 											List<News> removedNews = new ArrayList<>();
@@ -141,7 +140,7 @@ public class CollectorManager {
 								websiteCollector.setCollecting(false);
 							}
 						}
-						
+
 					}
 					count++;
 				}
@@ -153,8 +152,7 @@ public class CollectorManager {
 				if (currentDay != Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
 					currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 					try (Statement stm = con.createStatement()) {
-						// stm.execute("DELETE n1 FROM news n1, news n2 WHERE
-						// n1.id > n2.id AND n1.title = n2.title");
+						//stm.execute("DELETE n1 FROM news n1, news n2 WHERE n1.id > n2.id AND n1.title = n2.title");
 						stm.execute("delete from news where collectedtime < "
 								+ (System.currentTimeMillis() - 3 * 30 * 24 * 60 * 60 * 1000));// 12
 					}
@@ -329,7 +327,7 @@ public class CollectorManager {
 						newNews = null;
 					}
 				}
-				
+
 			} catch (Exception e) {
 				log.error("", e);
 				e.printStackTrace();
@@ -342,20 +340,24 @@ public class CollectorManager {
 
 	private Map<Integer, Set<String>> loadAllNewsTitles(Connection con) throws SQLException {
 		Map<Integer, Set<String>> titles = new HashMap<>();
-		try (PreparedStatement stm2 = con.prepareStatement("select title from news where collectedtime > ?")) {
-			stm2.setTimestamp(1, new Timestamp(System.currentTimeMillis() - 60 * 24 * 60 * 60 * 1000));
-			try (ResultSet rs = stm2.executeQuery()) {
-				while (rs.next()) {
-					String title = rs.getString("title");
-					Integer partition = Math.abs(title.hashCode() % 10);
-					if (!titles.containsKey(partition)) {
-						titles.put(partition, new HashSet<String>());
+		try {
+
+			try (PreparedStatement stm2 = con.prepareStatement("select title from news where collectedtime > ?")) {
+				stm2.setTimestamp(1, new Timestamp(System.currentTimeMillis() - 60 * 24 * 60 * 60 * 1000));
+				try (ResultSet rs = stm2.executeQuery()) {
+					while (rs.next()) {
+						String title = rs.getString("title");
+						Integer partition = Math.abs(title.hashCode() % 10);
+						if (!titles.containsKey(partition)) {
+							titles.put(partition, new HashSet<String>());
+						}
+						titles.get(partition).add(title);
 					}
-					titles.get(partition).add(title);
 				}
 			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
-
 		return titles;
 	}
 

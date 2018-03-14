@@ -8,12 +8,16 @@ import com.xyz.hayhay.website.parser.AsiaNikkeiParser;
 import com.xyz.hayhay.website.parser.ChinaDailyParser;
 import com.xyz.hayhay.website.parser.EpochtimesParser;
 import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
+import com.xyz.hayhay.website.parser.TheguardianParser;
 import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 
 import net.htmlparser.jericho.Source;
 
 public class HotNewsCollector extends ArticleCollector {
 	String[] urls = new String[] {
+			"https://www.theguardian.com/international",
+			"https://www.theguardian.com/uk-news",
+			"https://www.theguardian.com/cities",
 			"http://www.epochtimes.com/gb/n24hr.htm",
 			"http://www.epochtimes.com/gb/ncyule.htm", 
 			"http://www.chinadaily.com.cn/china/", 
@@ -38,6 +42,8 @@ public class HotNewsCollector extends ArticleCollector {
 			return new EpochtimesParser().collectArticle(source, url, fromWebsite);
 		}else if ("asia.nikkei.com".equals(fromWebsite)) {
 			return new AsiaNikkeiParser().collectArticle(source, url, fromWebsite);
+		}else if ("theguardian.com".equals(fromWebsite)) {
+			return new TheguardianParser().collectArticle(source, url, fromWebsite);
 		}
 		
 		return null;

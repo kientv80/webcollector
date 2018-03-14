@@ -13,12 +13,11 @@ public class ICTNewsCollector extends ArticleCollector {
 		super(repeatTime);
 	}
 
-	String[] urls = new String[]{"http://m.ictnews.vn/cntt"
-			,
-			"http://m.ictnews.vn/vien-thong",
-			"http://m.ictnews.vn/internet",
-			"http://m.ictnews.vn/the-gioi-so",
-			"http://m.ictnews.vn/cong-nghe-360"
+	String[] urls = new String[]{"http://ictnews.vn/the-gioi-so",
+			"http://ictnews.vn/vien-thong",
+			"http://ictnews.vn/internet",
+			"http://ictnews.vn/cntt",
+			"http://ictnews.vn/cong-nghe-360"
 			};
 	
 	

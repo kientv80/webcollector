@@ -7,12 +7,13 @@ import com.xyz.hayhay.website.collector.ArticleCollector;
 import com.xyz.hayhay.website.parser.FoxNewsParser;
 import com.xyz.hayhay.website.parser.NYTimesParser;
 import com.xyz.hayhay.website.parser.SouthChinaMorningPostParser;
+import com.xyz.hayhay.website.parser.TheguardianParser;
 import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 
 import net.htmlparser.jericho.Source;
 
 public class OpinionsCollector extends ArticleCollector {
-	String[] urls = new String[] { "https://www.washingtonpost.com/opinions"};
+	String[] urls = new String[] { "https://www.washingtonpost.com/opinions","https://www.theguardian.com/uk/commentisfree"};
 
 	public OpinionsCollector(long repeatTime) {
 		super(repeatTime);
@@ -22,6 +23,8 @@ public class OpinionsCollector extends ArticleCollector {
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		if ("washingtonpost.com".equals(fromWebsite)) {
 			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
+		}else if ("theguardian.com".equals(fromWebsite)) {
+			return new TheguardianParser().collectArticle(source, url, fromWebsite);
 		}
 		return null;
 	}
