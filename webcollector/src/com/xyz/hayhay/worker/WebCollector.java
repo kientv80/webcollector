@@ -2,8 +2,6 @@ package com.xyz.hayhay.worker;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,7 +9,6 @@ import java.util.TimerTask;
 import org.apache.log4j.Logger;
 
 import com.xyz.hayhay.ping.PingServer;
-import com.xyz.hayhay.website.collector.ArticleCollector;
 import com.xyz.hayhay.website.collector.BatDongSanCollector;
 import com.xyz.hayhay.website.collector.CollectorManager;
 import com.xyz.hayhay.website.collector.FunyStoryCollector;
@@ -48,7 +45,7 @@ public class WebCollector {
 //	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
 	boolean run = true;
 	
-	public void start(int from, int num) {
+	public void start() {
 
 		//Collect News
 		CollectorManager cMng = CollectorManager.getInstance();
@@ -78,7 +75,7 @@ public class WebCollector {
 		cMng.register(new HotNewsCollector(ONE_HOUR));
 		cMng.register(new TinTrongNuocArticleCollector(FIFTEEN_MINUTES));
 		
-		cMng.startCollectorManager(from,num);
+		cMng.startCollectorManager();
 		
 
 	}
@@ -88,16 +85,12 @@ public class WebCollector {
 			System.out.println("key=" + e.getKey() + " val=" + e.getValue());
 		}
 		if(System.getenv().get("collect")!= null){
-			System.out.println("Collect website");
-			int from = Integer.valueOf(System.getenv().get("from"));
-			int num = Integer.valueOf(System.getenv().get("num"));
-			new WebCollector().start(from,num);
+			new WebCollector().start();
 		}else{
 			System.out.println("Call process");
 			
 			Timer wnewsTimer = new Timer();
 			wnewsTimer.schedule(new TimerTask() {
-				int from = 0;
 				boolean running = false;
 				@Override
 				public void run() {
@@ -105,11 +98,8 @@ public class WebCollector {
 						if(running == true)
 							return;
 						running =true;
-						if(from >=22 )
-							from = 0;
-						
 						System.out.println("Start new process");
-						Process p = Runtime.getRuntime().exec("sh /kientv/webcollector/startserver.sh", new String[]{"collect=true","from="+from,"num="+(from+4)});
+						Process p = Runtime.getRuntime().exec("sh /kientv/webcollector/startserver.sh", new String[]{"collect=true"});
 						InputStream in = p.getInputStream();
 						byte[] buff = new byte[1024];
 						while(in.read(buff) > 0){
@@ -117,14 +107,12 @@ public class WebCollector {
 						}
 						in.close();
 						p.waitFor();
-						from+=4;
-						running = false;
 						System.out.println("Finished process with returned code = " + p.exitValue());
 						
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}finally {
+						running = false;
 						CollectorManager.lastTimeCollected = System.currentTimeMillis();
 					}
 				}

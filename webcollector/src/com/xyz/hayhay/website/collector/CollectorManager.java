@@ -16,9 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.apache.log4j.Logger;
 import org.htmlparser.Parser;
 import org.htmlparser.util.NodeIterator;
@@ -58,107 +55,86 @@ public class CollectorManager {
 	public static long lastTimeCollected;
 	int currentDay = 0;
 
-	public void startCollectorManager(int from, int num) {
-
-		// Timer wnewsTimer = new Timer();
-		// wnewsTimer.schedule(new TimerTask() {
-		// @Override
-		// public void run() {
-		// lastTimeCollected = System.currentTimeMillis();
-		// if (!isProcessing()) {
-		// start();
-		// }
-		// }
-		// }, 0, COLLECTING_PERIOD);// run every 5 minutes
-		start(from, num);
+	public void startCollectorManager() {
+		start();
 	}
 
-	public void start(int from, int num) {
+	public void start() {
 		if (processing)
 			return;
 		System.out.println("start processing");
 		setProcessing(true);
-
 		try {
-			List<News> allNews = new ArrayList<>();
-			int count = 0;
-
 			try (Connection con = JDBCConnection.getInstance().getConnection()) {
 				Map<Integer, Set<String>> allTiles = loadAllNewsTitles(con);
 				for (ArticleCollector websiteCollector : getCollector()) {
-					if (count >= from && count < num && count < getCollector().size()) {
-
-						if (!websiteCollector.isCollecting() && (System.currentTimeMillis()
-								- websiteCollector.getLastTimeProcessed()) > websiteCollector.getRepeatTime()) {
+					try {
+						String website = null;
+						for (String url : websiteCollector.collectedUrls()) {
 							try {
-								websiteCollector.setCollecting(true);
-								String website = null;
+								website = getfromWeb(url);
+								Source s = getSource(url);
+								List<News> articles = websiteCollector.collectArticle(s, url, website);
+								if (s != null) {
+									s.clearCache();
+									s = null;
+								}
+								Website w = new Website();
+								w.setOverwrite(websiteCollector.overwrite());
+								w.setName(website);
+								w.setNews(articles);
 
-								for (String url : websiteCollector.collectedUrls()) {
-									try {
-										website = getfromWeb(url);
-										Source s = getSource(url);
-										List<News> articles = websiteCollector.collectArticle(s, url, website);
-										if (s != null) {
-											s.clearCache();
-											s = null;
+								if (w.getNews() != null) {
+									System.out.println(
+											"Collect " + w.getNews().size() + " news for website " + w.getName());
+									
+									List<News> removedNews = new ArrayList<>();
+									for (News n : w.getNews()) {
+										int partition = Math.abs(n.getTitle().hashCode() % 10);
+										Set<String> titles = allTiles.get(partition);
+										if(titles == null){
+											titles = new HashSet<>();
+											allTiles.put(partition, titles);
 										}
-										Website w = new Website();
-										w.setOverwrite(websiteCollector.overwrite());
-										w.setName(website);
-										w.setNews(articles);
-
-										if (w.getNews() != null) {
-											System.out.println("Collect " + w.getNews().size() + " news for website "
-													+ w.getName());
-											w.getNews().removeAll(allNews);
-											allNews.addAll(w.getNews());
-											List<News> removedNews = new ArrayList<>();
-											for (News n : w.getNews()) {
-												int partition = Math.abs(n.getTitle().hashCode() % 10);
-												Set<String> titles = allTiles.get(partition);
-												if (titles != null && titles.contains(n.getTitle())) {
-													removedNews.add(n);
-												}
-											}
-											w.getNews().removeAll(removedNews);
-											storeNews(w, con);
-											w.getNews().clear();
-											w = null;
+										if (titles != null && titles.contains(n.getTitle())) {
+											removedNews.add(n);
+										}else {
+											titles.add(n.getTitle());
 										}
-
-									} catch (Exception e) {
-										log.error("URL=" + url, e);
-										System.out.println(e.getMessage() + websiteCollector.getClass().getSimpleName()
-												+ "  url = " + url);
-										e.printStackTrace();
 									}
+									w.getNews().removeAll(removedNews);
+									storeNews(w, con);
+									w.getNews().clear();
+									w = null;
 								}
 
-							} finally {
-								websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
-								websiteCollector.setCollecting(false);
+							} catch (Exception e) {
+								log.error("URL=" + url, e);
+								System.out.println(e.getMessage() + websiteCollector.getClass().getSimpleName()
+										+ "  url = " + url);
+								e.printStackTrace();
 							}
 						}
 
+					} finally {
+						websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
+						websiteCollector.setCollecting(false);
 					}
-					count++;
 				}
 				allTiles.clear();
 				allTiles = null;
-				allNews.clear();
-				allNews = null;
+
 				// Remove duplicated and old news
 				if (currentDay != Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
 					currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 					try (Statement stm = con.createStatement()) {
-						//stm.execute("DELETE n1 FROM news n1, news n2 WHERE n1.id > n2.id AND n1.title = n2.title");
+						// stm.execute("DELETE n1 FROM news n1, news n2 WHERE
+						// n1.id > n2.id AND n1.title = n2.title");
 						stm.execute("delete from news where collectedtime < "
-								+ (System.currentTimeMillis() - 3 * 30 * 24 * 60 * 60 * 1000));// 12
+								+ (System.currentTimeMillis() - 12 * 30 * 24 * 60 * 60 * 1000));// 12
 					}
 				}
 			}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -342,8 +318,7 @@ public class CollectorManager {
 		Map<Integer, Set<String>> titles = new HashMap<>();
 		try {
 
-			try (PreparedStatement stm2 = con.prepareStatement("select title from news where collectedtime > ?")) {
-				stm2.setTimestamp(1, new Timestamp(System.currentTimeMillis() - 60 * 24 * 60 * 60 * 1000));
+			try (PreparedStatement stm2 = con.prepareStatement("select distinct title  from news")) {
 				try (ResultSet rs = stm2.executeQuery()) {
 					while (rs.next()) {
 						String title = rs.getString("title");
