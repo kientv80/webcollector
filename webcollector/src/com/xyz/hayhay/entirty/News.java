@@ -246,47 +246,47 @@ public class News {
 	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
-	@Override
-	public int hashCode() {
-		// final int prime = 31;
-		// int result = 1;
-		// result = prime * result + ((title == null) ? 0 : title.hashCode());
-		// return result;
-		return 1;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof News)) {
-			return false;
-		}
-		News other = (News) obj;
-		double accurate = 0.8d;
-		if (other.getType() == NewsTypes.TYPE_MUSIC)
-			accurate = 1;
-		if (this.getFromWebSite().equals(other.getFromWebSite())) {
-			if (this.getUrl().equals(other.getUrl())) {
-				return true;
-			} else if (this.getTitle().equals(other.getTitle())) {
-				return true;
-			} else {
-				return isSiminler(this.getTitle(), other.getTitle(), accurate);
-			}
-		} else {
-			return isSiminler(this.getTitle(), other.getTitle(), accurate);
-		}
-	}
+//	@Override
+//	public int hashCode() {
+//		// final int prime = 31;
+//		// int result = 1;
+//		// result = prime * result + ((title == null) ? 0 : title.hashCode());
+//		// return result;
+//		return 1;
+//	}
+//
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see java.lang.Object#equals(java.lang.Object)
+//	 */
+//	@Override
+//	public boolean equals(Object obj) {
+//		if (this == obj) {
+//			return true;
+//		}
+//		if (obj == null) {
+//			return false;
+//		}
+//		if (!(obj instanceof News)) {
+//			return false;
+//		}
+//		News other = (News) obj;
+//		double accurate = 0.8d;
+//		if (other.getType() == NewsTypes.TYPE_MUSIC)
+//			accurate = 1;
+//		if (this.getFromWebSite().equals(other.getFromWebSite())) {
+//			if (this.getUrl().equals(other.getUrl())) {
+//				return true;
+//			} else if (this.getTitle().equals(other.getTitle())) {
+//				return true;
+//			} else {
+//				return isSiminler(this.getTitle(), other.getTitle(), accurate);
+//			}
+//		} else {
+//			return isSiminler(this.getTitle(), other.getTitle(), accurate);
+//		}
+//	}
 
 	public static boolean isSiminler(String str1, String str2, double percent) {
 		if (str1 == null && str2 == null)
@@ -306,6 +306,31 @@ public class News {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		News other = (News) obj;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
 	}
 
 	public static void main(String args[]) {
@@ -344,4 +369,13 @@ public class News {
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
+	public boolean isNeedUpdate() {
+		return needUpdate;
+	}
+
+	public void setNeedUpdate(boolean needUpdate) {
+		this.needUpdate = needUpdate;
+	}
+
+	private boolean needUpdate;
 }

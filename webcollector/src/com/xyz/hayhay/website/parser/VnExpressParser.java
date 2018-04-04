@@ -59,6 +59,9 @@ public class VnExpressParser extends BaseParser {
 		}else if("kinhdoanh.vnexpress.net".equals(fromWebsite)){
 			type = NewsTypes.TYPE.Economic.name();
 			parentType = NewsTypes.CATEGORY.Economic.name();
+		}else if("thethao.vnexpress.net".equals(fromWebsite)){
+			type = NewsTypes.TYPE.Sport.name();
+			parentType = NewsTypes.CATEGORY.Sport.name();
 		}
 		
 		if (type.isEmpty())
