@@ -312,7 +312,7 @@ public class News {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.toLowerCase().hashCode());
 		return result;
 	}
 
@@ -328,7 +328,7 @@ public class News {
 		if (title == null) {
 			if (other.title != null)
 				return false;
-		} else if (!title.equals(other.title))
+		} else if (!title.equalsIgnoreCase(other.title))
 			return false;
 		return true;
 	}

@@ -17,11 +17,12 @@ public class PingServer {
 					System.out.println("Waiting for connection...");
 					Socket clientSocket = svSocket.accept();
 					OutputStream out = clientSocket.getOutputStream();
-					if((System.currentTimeMillis()- CollectorManager.lastTimeCollected) < CollectorManager.COLLECTING_PERIOD){
-						out.write("alive".getBytes());
-					}else{
-						out.write("die".getBytes());
-					}
+					out.write("alive".getBytes());
+//					if((System.currentTimeMillis()- CollectorManager.lastTimeCollected) < CollectorManager.COLLECTING_PERIOD){
+//						out.write("alive".getBytes());
+//					}else{
+//						out.write("die".getBytes());
+//					}
 					out.close();
 					clientSocket.close();
 				} catch (IOException e) {

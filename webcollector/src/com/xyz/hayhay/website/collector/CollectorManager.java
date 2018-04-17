@@ -11,7 +11,9 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.htmlparser.Parser;
@@ -63,7 +65,7 @@ public class CollectorManager {
 		setProcessing(true);
 		try {
 			try (Connection con = JDBCConnection.getInstance().getConnection()) {
-				List<News> allNews = loadAllNews(con);
+				Set<News> allNews = loadAllNews(con);
 				for (ArticleCollector websiteCollector : getCollector()) {
 					try {
 						String website = null;
@@ -72,34 +74,34 @@ public class CollectorManager {
 								website = getfromWeb(url);
 								Source s = getSource(url);
 								List<News> articles = websiteCollector.collectArticle(s, url, website);
-								if (s != null) {
-									s.clearCache();
-									s = null;
-								}
+								if (articles == null || articles.isEmpty())
+									continue;
+
+								Set<News> uniquenews = new HashSet<>(articles);
 								Website w = new Website();
 								w.setOverwrite(websiteCollector.overwrite());
 								w.setName(website);
-								w.setNews(articles);
-
+								w.setNews(new ArrayList<News>(uniquenews));
 								if (w.getNews() != null) {
 									System.out.println(
 											"Collect " + w.getNews().size() + " news for website " + w.getName());
 									List<News> removedNews = new ArrayList<>();
 									for (News n : w.getNews()) {
-										for (News on : allNews) {
-											if (on.getUrl().equals(n.getUrl())) {
-												if (!on.getTitle().equals(n.getTitle())) {
+										if (allNews.contains(n)) {//contain title
+											removedNews.add(n);
+										} else {
+											for (News on : allNews) {
+												if (on.getUrl().equals(n.getUrl())) {
 													n.setId(on.getId());
 													n.setNeedUpdate(true);
-												} else {
-													removedNews.add(n);
+													break;
 												}
-											} else {
-												allNews.add(n);
 											}
+											allNews.add(n);
 										}
 									}
 									w.getNews().removeAll(removedNews);
+
 									storeNews(w, con);
 									w.getNews().clear();
 									w = null;
@@ -249,16 +251,17 @@ public class CollectorManager {
 		}
 	}
 
-	private List<News> loadAllNews(Connection con) throws SQLException {
-		List<News> news = new ArrayList<>();
+	private Set<News> loadAllNews(Connection con) throws SQLException {
+		Set<News> news = new HashSet<>();
 		try {
-			try (PreparedStatement stm2 = con.prepareStatement("select id,title,url from news")) {
+			try (PreparedStatement stm2 = con.prepareStatement("select id,title,url,fromwebsite from news")) {
 				try (ResultSet rs = stm2.executeQuery()) {
 					while (rs.next()) {
 						News n = new News();
 						n.setId(rs.getInt("id"));
 						n.setTitle(rs.getString("title"));
 						n.setUrl(rs.getString("url"));
+						n.setFromWebSite(rs.getString("fromwebsite"));
 						news.add(n);
 					}
 				}
