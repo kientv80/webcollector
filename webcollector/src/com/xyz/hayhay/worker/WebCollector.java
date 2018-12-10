@@ -48,7 +48,7 @@ public class WebCollector {
 	public void start() {
 
 		//Collect News
-		CollectorManager cMng = CollectorManager.getInstance();
+		CollectorManager cMng = new CollectorManager();
 		cMng.register(new BatDongSanCollector(ONE_HOUR));
 		cMng.register(new FunyStoryCollector(FOUR_HOURS));
 		cMng.register(new ICTNewsCollector(FIFTEEN_MINUTES));
@@ -79,7 +79,11 @@ public class WebCollector {
 		
 
 	}
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
+		CollectorScheduler.startScheduler();
+		//PingServer.startPingServer();
+	}
+	public static void mainBK(String[] args) throws IOException {
 		System.out.println("Main is called");
 		for(Entry<String, String> e : System.getenv().entrySet()){
 			System.out.println("key=" + e.getKey() + " val=" + e.getValue());

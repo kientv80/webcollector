@@ -18,7 +18,8 @@ public class AFamilyParser extends BaseParser{
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		List<Element> articles = null;
-		Image i = new Image();
+		Image i = new Image("a","class","afwblul-thumb", false);
+		i.setValueFromAtttributeName("style");
 		A a = new A();
 		a.setDomain("http://m.afamily.vn");
 		Title t = new Title("a",null,null,false);
@@ -30,49 +31,55 @@ public class AFamilyParser extends BaseParser{
 		if(url.endsWith("tinh-yeu-hon-nhan.chn")){
 			type = NewsTypes.TYPE.Love.name();
 			parentType = NewsTypes.CATEGORY.Love.name();
-			articles = source.getAllElementsByClass("list-news1").get(0).getChildElements();
+			articles = source.getAllElementsByClass("afctr-ul").get(0).getChildElements();
 		}else if(url.endsWith("me-va-be.chn")){
 			type = NewsTypes.TYPE.Family.name();
 			parentType = NewsTypes.CATEGORY.Love.name();
-			articles = source.getAllElementsByClass("list-news1").get(0).getChildElements();
+			articles = source.getAllElementsByClass("afctr-ul").get(0).getChildElements();
 		}else if(url.endsWith("suc-khoe.chn")){
 			type = NewsTypes.TYPE.Health.name();
 			parentType = NewsTypes.CATEGORY.Health.name();
-			articles = source.getAllElementsByClass("list-news1").get(0).getChildElements();
+			articles = source.getAllElementsByClass("afctr-ul").get(0).getChildElements();
 		} else{//expect this is cooking
-			if(url.endsWith("mon-an-tu-thit-heo.htm")){
+			if(url.endsWith("mon-an-tu-thit-heo.html")){
 				type = NewsTypes.TYPE.CookingPig.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();
-			}else if(url.endsWith("mon-an-tu-thit-ga.htm")){
+			}else if(url.endsWith("mon-an-tu-thit-ga.html")){
 				type = NewsTypes.TYPE.CookingHen.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
-			}else if(url.endsWith("mon-an-tu-tom.htm")){
+			}else if(url.endsWith("mon-an-tu-tom.html")){
 				type = NewsTypes.TYPE.CookingShrimp.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
-			}else if(url.endsWith("mon-an-tu-rau-cu.htm")){
+			}else if(url.endsWith("mon-an-tu-rau-cu.html")){
 				type = NewsTypes.TYPE.CookingVegetable.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
-			}else if(url.endsWith("mon-an-tu-trung.htm")){
+			}else if(url.endsWith("mon-an-tu-trung.html")){
 				type = NewsTypes.TYPE.CookingEgg.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
-			}else if(url.endsWith("mon-an-y.htm")){
+			}else if(url.endsWith("mon-an-y.html")){
 				type = NewsTypes.TYPE.CookingItaly.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
-			}else if(url.endsWith("mon-an-han-quoc.htm")){
+			}else if(url.endsWith("mon-an-han-quoc.html")){
 				type = NewsTypes.TYPE.CookingKorea.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
-			}else if(url.endsWith("mon-an-nhat-ban.htm")){
+			}else if(url.endsWith("mon-an-nhat-ban.html")){
 				type = NewsTypes.TYPE.CookingJapan.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
-			}else if(url.endsWith("mon-an-thai-lan.htm")){
+			}else if(url.endsWith("mon-an-thai-lan.html")){
 				type = NewsTypes.TYPE.CookingThai.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
-			}else if(url.endsWith("mon-an-phap.htm")){
+			}else if(url.endsWith("mon-an-phap.html")){
 				type = NewsTypes.TYPE.CookingFrance.name();
 				parentType = NewsTypes.CATEGORY.Cooking.name();;
 			}
 			
-			articles = source.getAllElementsByClass("solr-content").get(0).getChildElements().get(0).getChildElements();
+			if(articles == null )
+				articles = new ArrayList<>();
+			
+			for(Element e : source.getAllElementsByClass("afwbl-ul")) {
+				articles.addAll(e.getAllElements("li"));
+			}
+
 		}
 		if(type.isEmpty())
 			return null;
@@ -83,6 +90,10 @@ public class AFamilyParser extends BaseParser{
 			n.setParentCateName(parentType);
 			n.setFromWebSite(fromWebsite);
 			parseElementToNews(e, n, a, t, i, desc);
+			if(n.getImageUrl() !=  null && !n.getImageUrl().isEmpty()) {
+				//System.out.println(n.getImageUrl());
+				n.setImageUrl(n.getImageUrl().substring(n.getImageUrl().indexOf("https:"), n.getImageUrl().indexOf("')")));
+			}
 			if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
 					&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {
 				if (!news.contains(n)) {

@@ -1,11 +1,10 @@
 package com.xyz.hayhay.unitest;
 
-import com.xyz.hayhay.website.collector.ICTNewsCollector;
-import com.xyz.hayhay.website.collector.TinTrongNuocArticleCollector;
-import com.xyz.hayhay.website.collector.worldwebsite.HotNewsCollector;
+import com.xyz.hayhay.website.collector.*;
 
 public class UnitTest {
 	public static void main(String[] args) throws Exception {
-		new ICTNewsCollector(1).test();
+		new KinhTeCollector(1).test();
+		System.out.println("============================================");
 	}
 }

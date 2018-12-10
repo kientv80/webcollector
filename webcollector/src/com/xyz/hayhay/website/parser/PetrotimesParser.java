@@ -24,22 +24,24 @@ public class PetrotimesParser extends BaseParser {
 		image.setValueFromAtttributeName("src");
 		ShotDescription p = new ShotDescription("p", "itemprop", "description", true);
 		List<News> news = new ArrayList<>();
-
-		Element hot = s.getAllElementsByClass("fullboxNewsHotItem clearfix").get(0);
 		News hotN = new News();
 		hotN.setFromWebSite(fromWeb);
 		hotN.setType(NewsTypes.TYPE.Economic.name());
 		hotN.setParentCateName(NewsTypes.CATEGORY.Economic.name());
-		parseElementToNews(hot, hotN, a, t, image, p);
-		if (hotN.getTitle() != null && !hotN.getTitle().isEmpty() && hotN.getUrl() != null && !hotN.getUrl().isEmpty()
-				&& hotN.getImageUrl() != null && !hotN.getImageUrl().isEmpty()) {
-			if (!news.contains(hotN)) {
-				news.add(hotN);
+		if (s.getAllElementsByClass("fullboxNewsHotItem clearfix") != null
+				&& s.getAllElementsByClass("fullboxNewsHotItem clearfix").size() > 0) {
+			Element hot = s.getAllElementsByClass("fullboxNewsHotItem clearfix").get(0);
+			
+			parseElementToNews(hot, hotN, a, t, image, p);
+			if (hotN.getTitle() != null && !hotN.getTitle().isEmpty() && hotN.getUrl() != null
+					&& !hotN.getUrl().isEmpty() && hotN.getImageUrl() != null && !hotN.getImageUrl().isEmpty()) {
+				if (!news.contains(hotN)) {
+					news.add(hotN);
+				}
 			}
 		}
-
-		for (Element e : s.getAllElementsByClass("listINewsHotListing clearfix").get(0)
-				.getChildElements().get(0).getChildElements()) {
+		for (Element e : s.getAllElementsByClass("listINewsHotListing clearfix").get(0).getChildElements().get(0)
+				.getChildElements()) {
 			News n = new News();
 			n.setFromWebSite(fromWeb);
 			n.setType(NewsTypes.TYPE.Economic.name());

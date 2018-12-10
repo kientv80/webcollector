@@ -18,13 +18,12 @@ public class NYTimesParser extends BaseParser {
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		List<News> news = new ArrayList<>();
-		List<Element> articles = source.getElementById("main").getAllElementsByClass("story");
+		List<Element> articles = source.getAllElements("article");
 		A a = new A();
 		Title title = new Title("a", null, null, true);
 		Image i = new Image();
 		ShotDescription p = new ShotDescription("p", "class", "summary", true);
 		if(url.endsWith("?src=busfn")){
-			articles = source.getElementById("main").getAllElements("article");
 			title = new Title("h2", "class", "headline", true);
 		}
 		if (articles != null && !articles.isEmpty()) {

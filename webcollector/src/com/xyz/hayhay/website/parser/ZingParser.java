@@ -20,7 +20,7 @@ public class ZingParser  extends BaseParser{
 		A a = new A();
 		a.setDomain("http://news.zing.vn");
 		Title t = new Title("img", null, null, false);
-		t.setValueFromAtttributeName("title");
+		t.setValueFromAtttributeName("alt");
 		Image image = new Image();
 		image.setDomain("https:");
 		ShotDescription desc = new ShotDescription("p", "class", "summary", true);

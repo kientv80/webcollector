@@ -11,7 +11,7 @@ public class PingServer {
 	public static void startPingServer(){
 		ServerSocket svSocket = null;
 		try{
-			svSocket = new ServerSocket(8088);
+			svSocket = new ServerSocket(8089);
 			while(true){
 				try {
 					System.out.println("Waiting for connection...");

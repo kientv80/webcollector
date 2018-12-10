@@ -45,7 +45,7 @@ public class TuoiTreParser extends BaseParser {
 			String fromWebsite) {
 		List<News> tuoitreNews = new ArrayList<>();
 		
-		List<Element> hostNews = source.getAllElementsByClass("list-top").get(0).getAllElements("li");
+		List<Element> hostNews = source.getAllElementsByClass("list-news").get(0).getAllElements("li");
 		for(Element hn : hostNews){
 			News n = new News();
 			n.setFromWebSite(fromWebsite);
@@ -55,6 +55,7 @@ public class TuoiTreParser extends BaseParser {
 			parseElementToNews(hn, n, a, t, image, p);
 			if (n.getTitle() != null && !n.getTitle().isEmpty() && n.getUrl() != null && !n.getUrl().isEmpty()
 					&& n.getImageUrl() != null && !n.getImageUrl().isEmpty()) {
+					n.setImageUrl(n.getImageUrl().replace("16_10", "440_275"));
 				if (!tuoitreNews.contains(n)) {
 					tuoitreNews.add(n);
 				}
@@ -72,6 +73,7 @@ public class TuoiTreParser extends BaseParser {
 				parseElementToNews(midNews, mn, a, t, image, p);
 				if (mn.getTitle() != null && !mn.getTitle().isEmpty() && mn.getUrl() != null && !mn.getUrl().isEmpty()
 						&& mn.getImageUrl() != null && !mn.getImageUrl().isEmpty()) {
+					mn.setImageUrl(mn.getImageUrl().replace("16_10", "440_275"));
 					if (!tuoitreNews.contains(mn)) {
 						tuoitreNews.add(mn);
 					}

@@ -149,6 +149,9 @@ public abstract class ArticleCollector {
 			String website = getfromWeb(url);
 			Source s = getSource(url);
 			List<News> articles = collectArticle(s, url, website);
+//			articles.forEach(a->{
+//				System.out.println(a.getTitle());
+//			});
 			
 		}
 	}

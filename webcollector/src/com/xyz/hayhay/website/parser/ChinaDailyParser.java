@@ -25,10 +25,10 @@ public class ChinaDailyParser extends BaseParser {
 		articles.addAll(source.getAllElementsByClass("tw6"));
 		
 		A a = new A();
-		a.setDomain("http://www.chinadaily.com.cn/china/");
+		a.setDomain("http://");
 		Title title = new Title("a", null, null, true);
 		Image i = new Image();
-		i.setDomain("http://www.chinadaily.com.cn/china/");
+		i.setDomain("http://");
 		ShotDescription p = new ShotDescription("p", "class", "summary", true);
 		if (articles != null && !articles.isEmpty()) {
 			for (Element article : articles) {

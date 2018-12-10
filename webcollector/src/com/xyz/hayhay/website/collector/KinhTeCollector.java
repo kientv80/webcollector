@@ -13,7 +13,7 @@ import net.htmlparser.jericho.Source;
 public class KinhTeCollector extends ArticleCollector {
 	String[] urls = new String[] {"https://asia.nikkei.com/Politics-Economy/Economy/",
 			"https://asia.nikkei.com/Business/Consumers/", 
-			"http://petrotimes.vn/kinh-te", 
+			"https://petrotimes.vn/kinh-te", 
 			"https://tuoitre.vn/kinh-doanh.htm" ,
 			"https://www.tienphong.vn/kinh-te/"};
 

@@ -28,7 +28,7 @@ public class ThanhNienParser extends BaseParser{
 		List<News> news = new ArrayList<>();
 		String type = NewsTypes.TYPE.HotNews.name();
 		String parentType = NewsTypes.CATEGORY.HotNews.name();
-		articles = source.getAllElementsByClass("subcate-highlight clearfix").get(0).getAllElements("article");
+		articles = source.getAllElementsByClass("site-content").get(0).getAllElements("article");
 		articles.addAll(source.getAllElementsByClass("cate-list").get(0).getAllElements("article"));
 		if(url.endsWith("kinh-doanh/")){
 			type = NewsTypes.TYPE.Business.name();

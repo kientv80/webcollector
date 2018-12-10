@@ -15,8 +15,8 @@ public class XeCollector extends ArticleCollector {
 	}
 	String urls[] = new String[] { "https://vnexpress.net/tin-tuc/oto-xe-may/tu-van",
 			"https://vnexpress.net/tin-tuc/oto-xe-may/dien-dan", "https://vnexpress.net/tin-tuc/oto-xe-may/thi-truong",
-			"https://news.zing.vn/oto-xe-may/xe-may.html", "https://news.zing.vn/oto-xe-may/o-to.html",
-			"https://news.zing.vn/oto-xe-may/xe-do.html", "https://news.zing.vn/oto-xe-may/sieu-xe.html",
+			"https://news.zing.vn/xe-may.html", "https://news.zing.vn/o-to.html",
+			"https://news.zing.vn/xe-do.html", "https://news.zing.vn/sieu-xe.html",
 			"https://www.tienphong.vn/xe/"};
 
 	private List<News> collectFromVNExpress(Source s, String url,String fromWebsite) {

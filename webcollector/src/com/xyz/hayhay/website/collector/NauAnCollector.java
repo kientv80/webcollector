@@ -20,11 +20,11 @@ public class NauAnCollector extends ArticleCollector {
 			"http://monngonmoingay.com/mon-ngon-tu-muc/", "http://monngonmoingay.com/hai-san-khac/",
 			"http://monngonmoingay.com/mon-ngon-tu-nam/", "http://monngonmoingay.com/mon-ngon-tu-dau-hu/",
 			
-			"http://afamily.vn/an-ngon/mon-an-tu-thit-heo.htm","http://afamily.vn/an-ngon/mon-an-tu-thit-ga.htm",
-			"http://afamily.vn/an-ngon/mon-an-tu-rau-cu.htm","http://afamily.vn/an-ngon/mon-an-tu-tom.htm",
-			"http://afamily.vn/an-ngon/mon-an-tu-trung.htm","http://afamily.vn/an-ngon/mon-an-y.htm",
-			"http://afamily.vn/an-ngon/mon-an-han-quoc.htm","http://afamily.vn/an-ngon/mon-an-nhat-ban.htm",
-			"http://afamily.vn/an-ngon/mon-an-thai-lan.htm","http://afamily.vn/an-ngon/mon-an-phap.htm"
+			"http://afamily.vn/an-ngon/mon-an-tu-thit-heo.html","http://afamily.vn/an-ngon/mon-an-tu-thit-ga.html",
+			"http://afamily.vn/an-ngon/mon-an-tu-rau-cu.html","http://afamily.vn/an-ngon/mon-an-tu-tom.html",
+			"http://afamily.vn/an-ngon/mon-an-tu-trung.html","http://afamily.vn/an-ngon/mon-an-y.html",
+			"http://afamily.vn/an-ngon/mon-an-han-quoc.html","http://afamily.vn/an-ngon/mon-an-nhat-ban.html",
+			"http://afamily.vn/an-ngon/mon-an-thai-lan.html","http://afamily.vn/an-ngon/mon-an-phap.html"
 			};
 
 	@Override

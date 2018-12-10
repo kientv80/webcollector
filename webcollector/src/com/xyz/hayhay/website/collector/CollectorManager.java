@@ -3,6 +3,7 @@ package com.xyz.hayhay.website.collector;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,22 +30,22 @@ public class CollectorManager {
 	public static final int COLLECTING_PERIOD = 1 * 5 * 60 * 1000;
 	public Logger log = Logger.getLogger(CollectorManager.class);
 
-	private List<ArticleCollector> collector = null;
-	private static CollectorManager instance;
+	private List<ArticleCollector> collector = new ArrayList<ArticleCollector>();
+//	private static CollectorManager instance;
 	private boolean processing;
-
+	Set<String> badUrls = new HashSet<>();
 	long latestCollectTime;
 	long latestFinishedCollectTime;
 
-	public static CollectorManager getInstance() {
-		if (instance == null)
-			instance = new CollectorManager();
-		return instance;
-	}
-
-	private CollectorManager() {
-		setCollector(new ArrayList<ArticleCollector>());
-	}
+//	public static CollectorManager getInstance() {
+//		if (instance == null)
+//			instance = new CollectorManager();
+//		return instance;
+//	}
+//
+//	private CollectorManager() {
+//		setCollector(new ArrayList<ArticleCollector>());
+//	}
 
 	public void register(ArticleCollector wcollector) {
 		getCollector().add(wcollector);
@@ -59,10 +60,15 @@ public class CollectorManager {
 	}
 
 	public void start() {
-		if (processing)
+		if (processing) {
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>Is processing so skip");
 			return;
-		System.out.println("start processing");
+		}
+		long startTime = System.currentTimeMillis();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println(">>>>>>>>>>>>>>>>>>>>> start processing at " + df.format(new Date(startTime)));
 		setProcessing(true);
+		
 		try {
 			try (Connection con = JDBCConnection.getInstance().getConnection()) {
 				Set<News> allNews = loadAllNews(con);
@@ -70,6 +76,8 @@ public class CollectorManager {
 					try {
 						String website = null;
 						for (String url : websiteCollector.collectedUrls()) {
+							if(badUrls.contains(url))
+								continue;
 							try {
 								website = getfromWeb(url);
 								Source s = getSource(url);
@@ -87,7 +95,7 @@ public class CollectorManager {
 											"Collect " + w.getNews().size() + " news for website " + w.getName());
 									List<News> removedNews = new ArrayList<>();
 									for (News n : w.getNews()) {
-										if (allNews.contains(n)) {//contain title
+										if (allNews.contains(n)) {// contain title
 											removedNews.add(n);
 										} else {
 											for (News on : allNews) {
@@ -104,31 +112,41 @@ public class CollectorManager {
 
 									storeNews(w, con);
 									w.getNews().clear();
+									removedNews.clear();
+									articles.clear();
 									w = null;
 								}
-
+								s.clearCache();
+								s = null;
 							} catch (Exception e) {
+								badUrls.add(url);
 								log.error("URL=" + url, e);
 								System.out.println(e.getMessage() + websiteCollector.getClass().getSimpleName()
 										+ "  url = " + url);
 								e.printStackTrace();
+							}finally {
+								System.gc();
 							}
 						}
-
+					} catch (Exception e) {
+						e.printStackTrace();
 					} finally {
 						websiteCollector.setLastTimeProcessed(System.currentTimeMillis());
 						websiteCollector.setCollecting(false);
+						System.gc();
 					}
 				}
-
+				allNews.clear();
 				// Remove duplicated and old news
 				if (currentDay != Calendar.getInstance().get(Calendar.DAY_OF_MONTH)) {
 					currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-					try (Statement stm = con.createStatement()) {
+					try (PreparedStatement stm = con.prepareStatement("delete from news where collectedtime < ?")) {
 						// stm.execute("DELETE n1 FROM news n1, news n2 WHERE
 						// n1.id > n2.id AND n1.title = n2.title");
-						stm.execute("delete from news where collectedtime < "
-								+ (System.currentTimeMillis() - 12 * 30 * 24 * 60 * 60 * 1000));// 12
+						Calendar c = Calendar.getInstance();
+						c.add(Calendar.DAY_OF_YEAR, -6*30);
+						stm.setTimestamp(1, new Timestamp(c.getTimeInMillis()));
+						stm.execute();// 12
 					}
 				}
 			}
@@ -136,7 +154,10 @@ public class CollectorManager {
 			ex.printStackTrace();
 		} finally {
 			setProcessing(false);
-			System.out.println("End processing");
+			System.gc();
+			System.out.println(">>>>>>>>>>>>>>>>>>>>> End processing at " + df.format(new Date(startTime)));
+			System.out.println("End processing. Execution time = " + ((System.currentTimeMillis() - startTime) / 1000)
+					+ " seconds");
 		}
 
 	}
@@ -165,7 +186,6 @@ public class CollectorManager {
 		try {
 			Parser pa = new Parser(url);
 			NodeIterator no = pa.elements();
-
 			while (no.hasMoreNodes()) {
 				content.append(no.nextNode().toHtml());
 			}
@@ -178,16 +198,16 @@ public class CollectorManager {
 
 	private StringBuilder loadContentByCurl(String url) throws Exception {
 		Process process = Runtime.getRuntime().exec("curl " + url);
-
 		StringBuilder content = new StringBuilder();
-		BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-		String line = null;
-
-		while ((line = input.readLine()) != null) {
-			content.append(line).append("\n");
+		try (BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+			String line = null;
+			while ((line = input.readLine()) != null) {
+				content.append(line).append("\n");
+			}
 		}
-		// System.out.println(content);
+		process.waitFor();
+
 		return content;
 	}
 
