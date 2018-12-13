@@ -13,7 +13,7 @@ import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 import net.htmlparser.jericho.Source;
 
 public class PoliticsCollector extends ArticleCollector {
-	String[] urls = new String[] { "https://asia.nikkei.com/Politics-Economy/Policy-Politics","http://www.foxnews.com/politics.html", "https://www.nytimes.com/pages/politics/index.html"
+	String[] urls = new String[] { "https://asia.nikkei.com/Politics","http://www.foxnews.com/politics.html", "https://www.nytimes.com/pages/politics/index.html"
 			,"http://www.scmp.com/news/china/policies-politics","https://www.washingtonpost.com/politics"};
 
 	public PoliticsCollector(long repeatTime) {

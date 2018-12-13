@@ -18,14 +18,16 @@ public class ScienceNewsParser extends BaseParser{
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		List<News> news = new ArrayList<>();
-		List<Element> items = source.getAllElementsByClass("field-items field-items-nodes clearfix");
-		if(items != null && items.size() > 0){
-			List<Element> articles = items.get(0).getAllElements("article");
+		List<Element> articles = source.getAllElements("article");
+		if(articles != null && articles.size() > 0){
+			
 			A a = new A();
 			a.setDomain("https://www.sciencenews.org");
 			Title title = new Title("a", null, null, false);
 			title.setValueFromAtttributeName("title");
-			Image i = new Image();
+			Image i = new Image("img","typeof","foaf:Image",false);
+			i.setValueFromAtttributeName("src");
+			i.setExcludedTexts("data:image");
 			ShotDescription p = new ShotDescription("div", "class", "content clearfix", true);
 			for(Element article : articles){
 				News n = new News(News.COUNTRY.US.name());

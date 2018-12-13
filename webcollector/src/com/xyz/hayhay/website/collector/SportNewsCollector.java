@@ -85,7 +85,12 @@ public class SportNewsCollector extends ArticleCollector {
 			return collectFromThethao247(source, url, fromWebsite);
 		} else if ("thethaotv.vn".equals(fromWebsite)) {
 			return collectFromThethaoTV(source, url, fromWebsite);
+		} else if ("thethao.vnexpress.net".equals(fromWebsite)) {
+			return new VnExpressParser().collectArticle(source, url, fromWebsite);
+		} else if ("tienphong.vn".equals(fromWebsite)) {
+			return new TienPhongParser().collectArticle(source, url, fromWebsite);
 		}
+		
 		return null;
 	}
 

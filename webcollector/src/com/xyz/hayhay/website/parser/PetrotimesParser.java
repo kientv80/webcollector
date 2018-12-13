@@ -14,9 +14,13 @@ import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Source;
 
 public class PetrotimesParser extends BaseParser {
-
 	@Override
 	public List<News> collectArticle(Source s, String url, String fromWeb) {
+		return null;
+	}
+	
+//	@Override
+	public List<News> collectArticleBK(Source s, String url, String fromWeb) {
 		A a = new A();
 		Title t = new Title("a", null, null, true);
 		t.setValueFromAtttributeName("title");

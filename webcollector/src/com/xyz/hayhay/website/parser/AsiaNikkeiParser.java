@@ -18,18 +18,14 @@ public class AsiaNikkeiParser extends BaseParser {
 	@Override
 	public List<News> collectArticle(Source source, String url, String fromWebsite) {
 		List<News> news = new ArrayList<>();
-		List<Element> newsFeed = source.getAllElementsByClass("article-box");
-		newsFeed.addAll(source.getAllElementsByClass("features-list"));
-		List<Element> articles =  new ArrayList<>();
-		for(Element e : newsFeed){
-			articles.addAll(e.getAllElements("li"));
-		}
+		List<Element> articles= source.getAllElementsByClass("card__body");
+		
 		if (articles != null && !articles.isEmpty()) {
 			A a = new A();
 			a.setDomain("https://asia.nikkei.com");
 			
-			Title title = new Title("h2", "class", "title", true);
-
+			Title title = new Title("a",null,null,false);
+			title.setValueFromAtttributeName("title");
 			
 			Image i = new Image();
 			i.setDomain("https://asia.nikkei.com");
@@ -42,7 +38,7 @@ public class AsiaNikkeiParser extends BaseParser {
 					n.setType(NewsTypes.TYPE.HotNews.name());
 					n.setParentCateName(NewsTypes.CATEGORY.HotNews.name());
 					title = new Title("h2", "class", "title", true);
-				} else if (url.endsWith("Policy-Politics")) {
+				} else if (url.endsWith("Politics")) {
 					n.setType(NewsTypes.TYPE.Politics.name());
 					n.setParentCateName(NewsTypes.CATEGORY.Politics.name());
 				} else if (url.endsWith("Economy/")) {

@@ -61,13 +61,13 @@ public class WashingtonPostsParser extends BaseParser {
 			Title title = new Title("a", null, null, true);
 			title.setValueFromAtttributeName("alt");
 			Image i = new Image();
-			i.setValueFromAtttributeName("data-low-res-src");
+			i.setValueFromAtttributeName("data-hi-res-src");
 			ShotDescription p = new ShotDescription("div", "data-pb-field", "summary", true);
 			
 			if (!url.equals("https://www.washingtonpost.com/")) {
 				title = new Title("a", "data-pb-local-content-field", "web_headline", true);
 				i = new Image();
-				i.setValueFromAtttributeName("data-low-res-src");
+				i.setValueFromAtttributeName("data-hi-res-src");
 				a = new A("a", "data-pb-local-content-field", "web_headline", false);
 				p = new ShotDescription("p", "data-pb-local-content-field", "summary", true);
 			}

@@ -13,7 +13,7 @@ import com.xyz.hayhay.website.parser.WashingtonPostsParser;
 import net.htmlparser.jericho.Source;
 
 public class OpinionsCollector extends ArticleCollector {
-	String[] urls = new String[] { "https://www.washingtonpost.com/opinions","https://www.theguardian.com/uk/commentisfree"};
+	String[] urls = new String[] { "https://www.washingtonpost.com/opinions","https://www.foxnews.com/opinion"};
 
 	public OpinionsCollector(long repeatTime) {
 		super(repeatTime);
@@ -25,6 +25,8 @@ public class OpinionsCollector extends ArticleCollector {
 			return new WashingtonPostsParser().collectArticle(source, url, fromWebsite);
 		}else if ("theguardian.com".equals(fromWebsite)) {
 			return new TheguardianParser().collectArticle(source, url, fromWebsite);
+		}else if ("foxnews.com".equals(fromWebsite)) {
+			return new FoxNewsParser().collectArticle(source, url, fromWebsite);
 		}
 		return null;
 	}
